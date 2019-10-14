@@ -1,0 +1,13 @@
+body {
+  margin: 0px;
+  height: 100vh;
+  background: blue;
+}
+
+canvas {
+  display: block;
+}
+
+* {
+  margin: 0;
+}
