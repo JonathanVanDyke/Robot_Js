@@ -1,4 +1,5 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
+
 // const HUD = require('./hud')
 let bulletCount = 0;
 
@@ -79,7 +80,15 @@ function init() {
   let raycaster = new THREE.Raycaster();
   let mouse = new THREE.Vector2();
 
-
+  debugger
+  let test = socket.emit('spawn', {
+    id: socket.id,
+    x: player.position.x,
+    y: player.position.y,
+    z: player.position.z,
+    h: player.rotation.y,
+    pb: player.rotation.x
+  });
 
 
 
@@ -187,7 +196,7 @@ function createRenderer() {
 let animate = function (timeStamp) {
   // player.__dirtyPosition = true;
   // player.__dirtyRotation = true;
-  
+
   
   player.setAngularFactor(_vector);
   player.setAngularVelocity(_vector);
@@ -199,7 +208,9 @@ let animate = function (timeStamp) {
   rotateAngle = Math.PI / 2 * delta; // pi/2 radians (90 deg) per sec
 
   let time = document.getElementById('time')
-  time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
+  // time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
+  let socketData = 'nope';
+  time.innerHTML = `Time: ${socketData}`
 
   let start = requestAnimationFrame(animate);
 
@@ -282,6 +293,9 @@ let animate = function (timeStamp) {
     player.setLinearVelocity(_vector);
 
     player.translateOnAxis(new THREE.Vector3(0, 0, playerSpeed*100), -rotateAngle)
+
+ 
+
 
     // delete3DOBJ('bullet');
     
@@ -376,10 +390,36 @@ let animate = function (timeStamp) {
     // animate();
   }
 
+  // socket.emit('spawn', {
+  //   id: socket.id,
+  //   x: player.position.x,
+  //   y: player.position.y,
+  //   z: player.position.z,
+  //   h: player.rotation.y,
+  //   pb: player.rotation.x
+  // });
+
+  socket.emit('updatedPos', {
+    id: socket.id,
+    x: player.position.x,
+    y: player.position.y,
+    z: player.position.z,
+    h: player.rotation.y,
+    pb: player.rotation.x
+  });
+  debugger
+  // console.log(`io.sockets: ${io.sockets}`)
+  // console.log(`io: ${io}`)
+
   scene.simulate();
   // renderer.render(sceneHUD, cameraHUD)
   renderer.render(scene, camera);
 
+
+  socket.on('otherSpawn', (data) => {
+    socketData = data;
+    // console.log(data)
+  })
 
 };
 
