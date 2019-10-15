@@ -12,7 +12,7 @@ function reset(animate) {
   // scene.remove.apply(scene, scene.children);
   // init();
   setTimeout(() => {
-    location.reload()
+    // location.reload()
   }, 3000);
   
   
@@ -202,15 +202,17 @@ let animate = function (timeStamp) {
   time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
 
   let start = requestAnimationFrame(animate);
-  if (Math.floor(clock.elapsedTime * 100) >= RELOAD) {
-    let pointEle = document.getElementById('points')
-    // pointEle.className= 'finalpoint';
-    pointEle.style = 'color: red; position: absolute; top: 20%; left: 40%; padding: 10px; border: 5px solid black;';
-    pointEle.innerHTML = `Final Score: ${player.points}`
-    // pointEle.style = `align: center;`
-    cancelAnimationFrame(start);
-    reset(animate);
-  }
+
+  //!Comment in for time challenge!!!
+  // if (Math.floor(clock.elapsedTime * 100) >= RELOAD) {
+  //   let pointEle = document.getElementById('points')
+  //   // pointEle.className= 'finalpoint';
+  //   pointEle.style = 'color: red; position: absolute; top: 20%; left: 40%; padding: 10px; border: 5px solid black;';
+  //   pointEle.innerHTML = `Final Score: ${player.points}`
+  //   // pointEle.style = `align: center;`
+  //   cancelAnimationFrame(start);
+  //   reset(animate);
+  // }
 
   let timeDelta = (timeStamp - lastTimeStamp)/1000;
   lastTimeStamp = timeStamp;
@@ -324,7 +326,7 @@ let animate = function (timeStamp) {
     // bulletsLBlock.setLinearVelocity(new THREE.Vector3(xCompensator, 0, zCompensator))
 
     let wpVector2 = new THREE.Vector3();
-    bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 200, 0, player.getWorldDirection(wpVector2).z * -200))
+    bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 400, 0, player.getWorldDirection(wpVector2).z * -400))
     // bulletsLBlock.setLinearVelocity(new THREE.Vector3(0, 0, -100))
     // console.log(clock.getElapsedTime() - bulletsBlock.createdAt)
     
@@ -334,13 +336,13 @@ let animate = function (timeStamp) {
     // }
 
 
-    debugger
+    // debugger
     for (let i = 0; i < scene.children.length; i++) {
       if (scene.children[i].name === 'bullet') {
-        debugger
+        // debugger
         bulletCount += 1
         if (bulletCount > 100) {
-          debugger
+          // debugger
           for (let i = 0; i < scene.children.length; i++) {
             if (scene.children[i].name === 'bullet') {
               scene.remove(scene.children[i])

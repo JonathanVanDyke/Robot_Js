@@ -1,7 +1,10 @@
+// import { Socket } from "net";
+
 let MechLoader = new THREE.OBJLoader();
 MechLoader.load(
   'assets/mech.obj',
   function (object) {
+    debugger
     mechMesh = object.children[0]
     mechMesh.position.set(0, -4, 0);
     mechMesh.rotation.y = Math.PI;
@@ -23,6 +26,7 @@ MechLoader.load(
     player.add(mechMesh)
     player.position.set(0, 4, 0)
     scene.add(player)
+    
 }
 );
 
