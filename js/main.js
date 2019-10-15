@@ -281,7 +281,7 @@ let animate = function (timeStamp) {
 
     player.translateOnAxis(new THREE.Vector3(0, 0, playerSpeed*100), -rotateAngle)
 
-    delete3DOBJ('bullet');
+    // delete3DOBJ('bullet');
     
     // player.position.x -= Math.sin(player.rotation.y) * playerSpeed;
     // player.position.z -= Math.cos(player.rotation.y) * playerSpeed;

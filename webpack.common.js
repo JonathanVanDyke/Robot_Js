@@ -56,6 +56,7 @@ module.exports = {
     }
     ]
   },
+  devtool: 'source-map',
   plugins: [new MiniCssExtractPlugin({
     // Options similar to the same options in webpackOptions.output
     // all options are optional
