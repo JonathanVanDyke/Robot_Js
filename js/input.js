@@ -44,7 +44,7 @@ function Input() {
     if(e.keyCode === 74) {
       self.isFirePressed = isKeyDown;
     }
-    if(e.keyCode === 88) {
+    if(e.keyCode === 75) {
       self.isXPressed = isKeyDown;
     }
   }

@@ -2,6 +2,24 @@ let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, 
 // const HUD = require('./hud')
 let bulletCount = 0;
 
+let RELOAD = 1000; 
+
+function reset(animate) {
+  // for (let i = scene.children.length - 1; i >= 0; i--) {
+  //   debugger
+  //     scene.remove(scene.children[i])
+  // }
+  // scene.remove.apply(scene, scene.children);
+  // init();
+  setTimeout(() => {
+    location.reload()
+  }, 3000);
+  
+  
+  // animate();
+  // requestAnimationFrame(animate);
+}
+
 function init() {
   
 
@@ -126,7 +144,7 @@ function createMeshes() {
   // //Cat mode
 
   // let player = new THREE.Mesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
-  player = new Physijs.BoxMesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
+  player = new Physijs.BoxMesh(playerGeometry, playerMaterial, 1, 0); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
   player.add(camera)
@@ -152,6 +170,14 @@ function createRenderer() {
   document.body.appendChild(pointTally);
   pointTally.innerHTML = 'Score: 0'
 
+
+  timeTally = document.createElement('h1');
+  timeTally.id = 'time'
+  timeTally.style.position = 'absolute';
+  timeTally.style.marginTop = '100';
+  document.body.appendChild(timeTally);
+  timeTally.innerHTML = 'Time: 0'
+
   document.body.appendChild(renderer.domElement);
 }
 
@@ -162,6 +188,7 @@ let animate = function (timeStamp) {
   // player.__dirtyPosition = true;
   // player.__dirtyRotation = true;
   
+  
   player.setAngularFactor(_vector);
   player.setAngularVelocity(_vector);
   // player.setLinearVelocity(new THREE.Vector3(0, 0, 0));
@@ -171,9 +198,19 @@ let animate = function (timeStamp) {
   let moveDistance = 200 * delta; // 200 pixels per second
   rotateAngle = Math.PI / 2 * delta; // pi/2 radians (90 deg) per sec
 
+  let time = document.getElementById('time')
+  time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
 
-
-  requestAnimationFrame(animate);
+  let start = requestAnimationFrame(animate);
+  if (Math.floor(clock.elapsedTime * 100) >= RELOAD) {
+    let pointEle = document.getElementById('points')
+    // pointEle.className= 'finalpoint';
+    pointEle.style = 'color: red; position: absolute; top: 20%; left: 40%; padding: 10px; border: 5px solid black;';
+    pointEle.innerHTML = `Final Score: ${player.points}`
+    // pointEle.style = `align: center;`
+    cancelAnimationFrame(start);
+    reset(animate);
+  }
 
   let timeDelta = (timeStamp - lastTimeStamp)/1000;
   lastTimeStamp = timeStamp;
@@ -194,7 +231,7 @@ let animate = function (timeStamp) {
   if (input.isLeftPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-
+    player.setLinearVelocity(_vector);
     player.translateOnAxis(new THREE.Vector3(playerSpeed * 100, 0, 0), -rotateAngle)
 
     // player.position.x -= Math.sin(player.rotation.y + Math.PI / 2) * playerSpeed;
@@ -204,7 +241,7 @@ let animate = function (timeStamp) {
   if (input.isRightPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-
+    player.setLinearVelocity(_vector);
     player.translateOnAxis(new THREE.Vector3(-playerSpeed * 100, 0, 0), -rotateAngle)
 
     // player.position.x += Math.sin(player.rotation.y + Math.PI / 2) * playerSpeed;
@@ -214,16 +251,17 @@ let animate = function (timeStamp) {
   if (input.isSpacePressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-    player.translateOnAxis(new THREE.Vector3(0, -movementSpeed * 1000, 0), -rotateAngle)
+    player.setLinearVelocity(_vector);
     player.setAngularFactor(_vector);
     player.setAngularVelocity(_vector);
+    player.translateOnAxis(new THREE.Vector3(0, -movementSpeed * 1000, 0), -rotateAngle)
     // player.position.y += playerSpeed*2;
   }
 
   if(input.isXPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-    if (player.position.y > 20) {
+    if (player.position.y > 60) {
       player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 200, 0), -rotateAngle)
       player.setAngularFactor(_vector);
       player.setAngularVelocity(_vector);
@@ -236,6 +274,10 @@ let animate = function (timeStamp) {
   if (input.isFwdPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
+    player.setAngularFactor(_vector);
+    player.setAngularVelocity(_vector);
+    player.setAngularFactor(_vector);
+    player.setLinearVelocity(_vector);
 
     player.translateOnAxis(new THREE.Vector3(0, 0, playerSpeed*100), -rotateAngle)
 
@@ -248,7 +290,7 @@ let animate = function (timeStamp) {
   if (input.isBwdPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-
+    player.setLinearVelocity(_vector);
     player.translateOnAxis(new THREE.Vector3(0, 0, -playerSpeed * 100), -rotateAngle)
 
     // player.position.x += Math.sin(player.rotation.y) * playerSpeed;
@@ -258,6 +300,7 @@ let animate = function (timeStamp) {
   if (input.isRLPressed) {
     // player.rotation.y += playerSpeed/4;
     player.rotateOnAxis(new THREE.Vector3(0, 1, 0), +0.05); 
+    player.setLinearVelocity(_vector);
     // console.log(player.rotateOnAxis)
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
@@ -266,6 +309,7 @@ let animate = function (timeStamp) {
   if (input.isRRPressed) {
 
     player.rotateOnAxis(new THREE.Vector3(0, 1, 0), -0.05); 
+    player.setLinearVelocity(_vector);
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
   }
@@ -306,6 +350,8 @@ let animate = function (timeStamp) {
         }
       }
     }
+    player.setAngularFactor(_vector);
+    player.setAngularVelocity(_vector);
   }
   
 
