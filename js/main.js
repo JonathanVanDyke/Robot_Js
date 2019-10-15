@@ -1,9 +1,9 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
 // const HUD = require('./hud')
-
+let bulletCount = 0;
 
 function init() {
-
+  
 
   // 201 
   Physijs.scripts.worker = './lib/physijs_worker.js';
@@ -15,11 +15,11 @@ function init() {
   scene = new Physijs.Scene;
 
   // let scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 20 }); //Slow down scene to fix rotation bug
-  scene.setGravity(new THREE.Vector3(0, -20, 0));
+  scene.setGravity(new THREE.Vector3(0, -5, 0));
   {
     const color = 'grey';  // white
     const near = 90;
-    const far = 150;
+    const far = 300;
     // scene.fog = new THREE.Fog(color, near, far);
   }
   scene.background = new THREE.Color('skyblue');
@@ -172,6 +172,7 @@ let animate = function (timeStamp) {
   rotateAngle = Math.PI / 2 * delta; // pi/2 radians (90 deg) per sec
 
 
+
   requestAnimationFrame(animate);
 
   let timeDelta = (timeStamp - lastTimeStamp)/1000;
@@ -184,6 +185,7 @@ let animate = function (timeStamp) {
   let boost = 1;
   if (input.isShiftPressed) {
     boost = 15 * movementSpeed;
+    // boost = 1
   }
 
   let playerSpeed = movementSpeed * boost * 2;
@@ -212,11 +214,22 @@ let animate = function (timeStamp) {
   if (input.isSpacePressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-    player.translateOnAxis(new THREE.Vector3(0, -playerSpeed * 100, 0), -rotateAngle)
+    player.translateOnAxis(new THREE.Vector3(0, -movementSpeed * 1000, 0), -rotateAngle)
     player.setAngularFactor(_vector);
     player.setAngularVelocity(_vector);
     // player.position.y += playerSpeed*2;
   }
+
+  if(input.isXPressed) {
+    player.__dirtyPosition = true;
+    player.__dirtyRotation = true;
+    if (player.position.y > 20) {
+      player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 200, 0), -rotateAngle)
+      player.setAngularFactor(_vector);
+      player.setAngularVelocity(_vector);
+    }
+  }
+
   //FWD 
 
 
@@ -267,7 +280,7 @@ let animate = function (timeStamp) {
     // bulletsLBlock.setLinearVelocity(new THREE.Vector3(xCompensator, 0, zCompensator))
 
     let wpVector2 = new THREE.Vector3();
-    bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 100, 0, player.getWorldDirection(wpVector2).z * -100))
+    bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 200, 0, player.getWorldDirection(wpVector2).z * -200))
     // bulletsLBlock.setLinearVelocity(new THREE.Vector3(0, 0, -100))
     // console.log(clock.getElapsedTime() - bulletsBlock.createdAt)
     
@@ -275,6 +288,24 @@ let animate = function (timeStamp) {
     //   debugger
     //   delete3DOBJ('bullet')
     // }
+
+
+    debugger
+    for (let i = 0; i < scene.children.length; i++) {
+      if (scene.children[i].name === 'bullet') {
+        debugger
+        bulletCount += 1
+        if (bulletCount > 100) {
+          debugger
+          for (let i = 0; i < scene.children.length; i++) {
+            if (scene.children[i].name === 'bullet') {
+              scene.remove(scene.children[i])
+            }
+          }
+          bulletCount = 0;
+        }
+      }
+    }
   }
   
 

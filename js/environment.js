@@ -18,6 +18,23 @@ function Environment() {
     map: texture, 
   });
 
+  //TARGET TEXTURE
+
+  const Targettexture = textureLoader.load( 'textures/tron1.jpg' );
+
+  Targettexture.encoding = THREE.sRGBEncoding;
+
+  Targettexture.anisotropy = 16;
+
+  Targettexture.wrapS = Targettexture.wrapT = THREE.RepeatWrapping;
+  Targettexture.offset.set(0, 0);
+  Targettexture.repeat.set(200, 200);
+
+  // debugger
+  const TargetMaterialMap = new THREE.MeshStandardMaterial( {
+    map: Targettexture, 
+  });
+
   //GROUND
   let groundGeometry = new THREE.PlaneGeometry(1000, 1000, 0); //PRIMITIVE SHAPE AND SIZE
   let groundMaterial = new THREE.MeshBasicMaterial({ color: 'black' }); //COLOR OF MESH
@@ -33,23 +50,23 @@ function Environment() {
     restitution
   );
 
-  let ground = new Physijs.PlaneMesh(groundGeometry, materialMap); //MESH POINTS MAT TO GEOMETRY
+  let ground = new Physijs.PlaneMesh(groundGeometry, materialMap, 0, 0); //MESH POINTS MAT TO GEOMETRY
   ground.rotation.x = -0.5 * Math.PI;
   ground.name = 'ground'
   ground.receiveShadow = true;
   scene.add(ground); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
 
-  // 07c
-  // ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
-  for (let i = 0; i < 100; i++) {
-    let env2BlockGeometry = new THREE.BoxBufferGeometry(1, 1, 1); //PRIMITIVE SHAPE AND SIZE
-    let env2BlockMaterial = new THREE.MeshLambertMaterial({ color: 0x22CAC2 }); //COLOR OF MESH
-    let env2Block = new THREE.Mesh(env2BlockGeometry, env2BlockMaterial); //MESH POINTS MAT TO GEOMETRY
-    env2Block.position.x = (Math.random() - 0.5) * 400;
-    env2Block.position.y = (Math.random() - 0.5) * 400;
-    env2Block.position.z = (Math.random() - 0.5) * 300;
-    // scene.add(env2Block); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
-  }
+  // // 07c
+  // // ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
+  // for (let i = 0; i < 100; i++) {
+  //   let env2BlockGeometry = new THREE.BoxBufferGeometry(1, 1, 1); //PRIMITIVE SHAPE AND SIZE
+  //   let env2BlockMaterial = new THREE.MeshLambertMaterial({ color: 0x22CAC2 }); //COLOR OF MESH
+  //   let env2Block = new THREE.Mesh(env2BlockGeometry, env2BlockMaterial); //MESH POINTS MAT TO GEOMETRY
+  //   env2Block.position.x = (Math.random() - 0.5) * 400;
+  //   env2Block.position.y = (Math.random() - 0.5) * 400;
+  //   env2Block.position.z = (Math.random() - 0.5) * 300;
+  //   // scene.add(env2Block); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
+  // }
 
   let _vector = new THREE.Vector3(0, 0, 0)
   for (let i = 0; i < 200; i++) {
@@ -62,7 +79,7 @@ function Environment() {
     // debugger//
     env3Block.scale.set(2, 2, 2)
     env3Block.name = 'floorBlock'
-    scene.add(env3Block); //DROP ELEMENST INTO VIRTUAL ENVIRONMENT
+    // scene.add(env3Block); //DROP ELEMENST INTO VIRTUAL ENVIRONMENT
 
     env3Block.setAngularFactor(_vector);
     env3Block.setAngularVelocity(_vector);
@@ -77,28 +94,101 @@ function Environment() {
     });
   }
 
+  _vector = new THREE.Vector3(0, 0, 0)
+  for (let i = 0; i < 100; i++) {
+    let TargetBlockGeometry = new THREE.CylinderBufferGeometry(1, 1, 1, 100); //PRIMITIVE SHAPE AND SIZE
+
+    let color;
+    if (i % 2 === 0) {
+      color = 0xff00C2;
+      rot = Math.PI / 2
+    } else {
+      color = 0xffffff;
+      rot = 0;
+    }
+    let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
+
+    let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, TargetBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+    TargetBlock.position.x = (Math.random() - 0.5) * 300;
+    TargetBlock.position.y = (Math.random() - 0.5) * 300 + 200;
+    TargetBlock.position.z = (Math.random() - 0.5) * 300;
+    TargetBlock.rotation.x = Math.PI / 2;
+    TargetBlock.rotation.z = rot;
+    // debugger//
+    TargetBlock.scale.set(10, 1, 10)
+    TargetBlock.name = 'target'
+    scene.add(TargetBlock); //DROP ELEMENST INTO VIRTUAL ENVIRONMENT
+
+    TargetBlock.setAngularFactor(_vector);
+    TargetBlock.setAngularVelocity(_vector);
+
+    TargetBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
+      if (other_object.name === 'bullet') {
+        player.points += 1;
+        let pointEle = document.getElementById('points')
+        pointEle.innerHTML = `Score: ${player.points}`
+        // TargetBlock.visible = false;
+        scene.remove(this);
+      }
+    });
+  }
+
   for (let i = 0; i < 20; i++) {
-    let BIGheight = (Math.random() - 0.5) * 10;
+    // let BIGheight = (Math.random() - 0.5) * 10;
+    let BIGheight = 1;
+    let Trunkheight = 2.125
     let env1BIGBlockGeometry = new THREE.BoxBufferGeometry(1, BIGheight, 1); //PRIMITIVE SHAPE AND SIZE
     let env1BIGBlockMaterial = new THREE.MeshLambertMaterial({ color: 0x6bff42 }); //COLOR OF MESH
-    let env1BIGBlock = new Physijs.BoxMesh(env1BIGBlockGeometry, env1BIGBlockMaterial, 1, 0); //MESH POINTS MAT TO GEOMETRY
-    env1BIGBlock.position.x = (Math.random() - 0.5) * 400;
-    env1BIGBlock.position.y = 10
-    env1BIGBlock.position.z = (Math.random() - 0.5) * 400;
+    let env1BIGBlock = new Physijs.BoxMesh(env1BIGBlockGeometry, env1BIGBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+    let env1TrunkBlockGeometry = new THREE.BoxBufferGeometry(.25, Trunkheight, .25, 1); //PRIMITIVE SHAPE AND SIZE
+    let env1TrunkBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff }); //COLOR OF MESH
+    let env1TrunkBlock = new Physijs.BoxMesh(env1TrunkBlockGeometry, env1TrunkBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+
+    env1TrunkBlock.position.x = env1BIGBlock.position.x;
+    env1TrunkBlock.position.y = 1
+    env1TrunkBlock.position.z = env1BIGBlock.position.z;
+
+    env1BIGBlock.add(env1TrunkBlock)
+    env1BIGBlock.hp = 100;
+    env1BIGBlock.rotation.x = Math.PI
+
+    env1BIGBlock.position.x = (Math.random() - 0.5) * 600;
+    env1BIGBlock.position.y = 40
+    env1BIGBlock.position.z = (Math.random() - 0.5) * 600;
+
+
     // debugger
     env1BIGBlock.scale.set(20, 20, 20)
     env1BIGBlock.name = 'floorBlock'
-    // scene.add(env1BIGBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
+    env1TrunkBlock.name = 'floorBlock'
+    
+    scene.add(env1BIGBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
+    // scene.add(env1TrunkBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
 
     env1BIGBlock.setAngularFactor(_vector);
     env1BIGBlock.setAngularVelocity(_vector);
 
     env1BIGBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
       if (other_object.name === 'bullet') {
-        player.points += 1;
-        let pointEle = document.getElementById('points')
-        pointEle.innerHTML = `Score: ${player.points}`
-        env1BIGBlock.visible = false;
+        env1BIGBlock.hp -= 1;
+        if (env1BIGBlock.hp === 0) {
+          player.points += 100;
+          let pointEle = document.getElementById('points')
+          pointEle.innerHTML = `Score: ${player.points}`
+          env1BIGBlock.visible = false;
+        }
+      }
+    });
+
+    env1TrunkBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
+      if (other_object.name === 'bullet') {
+        env1BIGBlock.hp -= 1;
+        if (env1BIGBlock.hp === 0) {
+          player.points += 10;
+          let pointEle = document.getElementById('points')
+          pointEle.innerHTML = `Score: ${player.points}`
+          env1BIGBlock.visible = false;
+        }
       }
     });
   }

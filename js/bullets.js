@@ -54,7 +54,7 @@ Bullets.prototype.fire = (playerSpeed) => {
     // console.log(linear_velocity)
     // console.log(angular_velocity)
     // env3Block.material.wireframe = true
-    if (other_object.name === 'ground' || other_object.name === 'floorBlock') {
+    if (other_object.name === 'ground' || other_object.name === 'floorBlock' || other_object.name === 'target') {
       let selectedObject = scene.getObjectByName('bullet');
       if (selectedObject) {
         console.log(other_object.name)

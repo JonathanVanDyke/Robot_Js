@@ -13,6 +13,7 @@ function Input() {
   self.isSpacePressed = false;
   //bullets?
   self.isFirePressed = false;
+  self.isXPressed = false;
 
   //Handle key events (setting value according to event listener)
   const handleKeyEvent = (e, isKeyDown) => {
@@ -42,6 +43,9 @@ function Input() {
     }
     if(e.keyCode === 74) {
       self.isFirePressed = isKeyDown;
+    }
+    if(e.keyCode === 88) {
+      self.isXPressed = isKeyDown;
     }
   }
 
