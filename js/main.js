@@ -80,15 +80,15 @@ function init() {
   let raycaster = new THREE.Raycaster();
   let mouse = new THREE.Vector2();
 
-  debugger
-  let test = socket.emit('spawn', {
-    id: socket.id,
-    x: player.position.x,
-    y: player.position.y,
-    z: player.position.z,
-    h: player.rotation.y,
-    pb: player.rotation.x
-  });
+  // debugger
+  // let test = socket.emit('spawn', {
+  //   id: socket.id,
+  //   x: player.position.x,
+  //   y: player.position.y,
+  //   z: player.position.z,
+  //   h: player.rotation.y,
+  //   pb: player.rotation.x
+  // });
 
 
 
@@ -399,15 +399,15 @@ let animate = function (timeStamp) {
   //   pb: player.rotation.x
   // });
 
-  socket.emit('updatedPos', {
-    id: socket.id,
-    x: player.position.x,
-    y: player.position.y,
-    z: player.position.z,
-    h: player.rotation.y,
-    pb: player.rotation.x
-  });
-  debugger
+  // socket.emit('updatedPos', {
+  //   id: socket.id,
+  //   x: player.position.x,
+  //   y: player.position.y,
+  //   z: player.position.z,
+  //   h: player.rotation.y,
+  //   pb: player.rotation.x
+  // });
+  // debugger
   // console.log(`io.sockets: ${io.sockets}`)
   // console.log(`io: ${io}`)
 
