@@ -163,11 +163,7 @@ function createMeshes() {
 
   player2 = new Physijs.BoxMesh(playerGeometry, playerMaterial);
 
-  let TESTBlockGeometry = new THREE.BoxBufferGeometry(10, 7, 1); //PRIMITIVE SHAPE AND SIZE
-  let TESTBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff }); //COLOR OF MESH
-  let TESTBlock = new Physijs.BoxMesh(TESTBlockGeometry, TESTBlockMaterial); //MESH POINTS MAT TO GEOMETRY
-  TESTBlock.position.set(0, 10, -10);
-  scene.add(TESTBlock)
+  player2.hp = 200;
 }
 
 function createRenderer() {
@@ -190,6 +186,13 @@ function createRenderer() {
   document.body.appendChild(pointTally);
   pointTally.innerHTML = 'Score: 0'
 
+  opponentHP = document.createElement('h1');
+  opponentHP.id = 'opponent'
+  opponentHP.style.position = 'absolute';
+  opponentHP.style.marginTop = '70';
+  document.body.appendChild(opponentHP);
+  opponentHP.innerHTML = `Opponent HP: ${player2.hp}`;
+
 
   timeTally = document.createElement('h1');
   timeTally.id = 'time'
@@ -204,6 +207,7 @@ function createRenderer() {
   winnerUI.style.marginTop = '130';
   document.body.appendChild(winnerUI);
   winnerUI.innerHTML = 'FIGHT!'
+
 
   document.body.appendChild(renderer.domElement);
 }
@@ -253,7 +257,7 @@ let animate = function (timeStamp) {
   //BOOST
   let boost = 1;
   if (input.isShiftPressed) {
-    boost = 15 * movementSpeed;
+    boost = 10 * movementSpeed;
     // boost = 1
   }
 
@@ -293,7 +297,7 @@ let animate = function (timeStamp) {
   if(input.isXPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-    if (player.position.y > 60) {
+    if (player.position.y > 10) {
       player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 200, 0), -rotateAngle)
       player.setAngularFactor(_vector);
       player.setAngularVelocity(_vector);
