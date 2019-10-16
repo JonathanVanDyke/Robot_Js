@@ -1,4 +1,5 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
+let player2 = { id: null, x: 0, y: 0, z: 0, ph: 0 };
 let serverPackage = [];
 let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
@@ -145,7 +146,7 @@ function createMeshes() {
   let playerMaterial = new THREE.MeshLambertMaterial({
     color: 0x22CAC2,
     transparent: true,
-    opacity: 0.0,
+    opacity: 1.0,
     wireframe: true,
   }); //COLOR OF MESH
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
@@ -155,17 +156,20 @@ function createMeshes() {
   player.position.set(0, 1, 0);
   player.name = 'player';
   player.add(camera)
+  
+  // let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
+  // let player2Material = new THREE.MeshLambertMaterial({
+  //   color: 0x22CAC2,
+  // })
 
-  let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
-  let player2Material = new THREE.MeshLambertMaterial({
-    color: 0x22CAC2,
-  })
-
-  player2 = new THREE.Mesh(player2Geometry, player2Material);
-  player2.position.set(0, 0, 0);
+  // player2 = new THREE.Mesh(player2Geometry, player2Material);
+  // player2 = player.clone();
+  // player2.position.set(0, 0, 0);
   // player2.rotation.y = Math.PI / 4 * .25;
-  player2.name = 'player2';
-  scene.add(player2);
+  
+  player2 = player.clone();
+  // player2.rotation.y = adjustRot;
+  // scene.add(player2);
 }
 
 function createRenderer() {
@@ -303,7 +307,7 @@ let animate = function (timeStamp) {
     player.setLinearVelocity(_vector);
 
     player.translateOnAxis(new THREE.Vector3(0, 0, playerSpeed*100), -rotateAngle)
-    // console.log(player.getWorldQuaternion().y)
+    // console.log(player.getWorldQuaternion())
  
 
 
@@ -413,10 +417,17 @@ let animate = function (timeStamp) {
   player.getWorldDirection(wpVector2).y
 
   //player 2 update...
+  var tquaternion = new THREE.Quaternion()
+  if (player2Data.h) {
+    player2Data.h = player2Data.h
+  } else {
+    player2Data.h = tquaternion
+  }
   player2.position.x = player2Data.x;
   player2.position.y = player2Data.y;
   player2.position.z = player2Data.z;
-  player2.rotation.y = player2Data.h;
+  // player2.rotation.y = player2Data.h;
+  player2.rotation.setFromQuaternion(player2Data.h);
   // player2.rotateOnAxis(new THREE.Vector3(0, 1, 0));
   // let xComp = player.getWorldDirection(wpVector2).x;
   // let zComp = player.getWorldDirection(wpVector2).z;
@@ -424,14 +435,16 @@ let animate = function (timeStamp) {
   // let yComp = Math.cos(zComp/xComp);
   // player2.rotateOnAxis(player2Data.h)
 
-  var tquaternion = new THREE.Quaternion()
+  
+  let adjustRot = THREE.Math.degToRad(20)
   // debugger
   socket.emit('updatedPos', {
     id: socket.id,
     x: player.position.x,
     y: player.position.y,
     z: player.position.z,
-    h: player.getWorldQuaternion(tquaternion).y,
+    // h: player.getWorldQuaternion(tquaternion).y,
+    h: player.getWorldQuaternion(tquaternion),
     // h: new THREE.Vector3(-player.getWorldDirection(wpVector2).x, 0, player.getWorldDirection(wpVector2).z),
     pb: player.position.y,
   });

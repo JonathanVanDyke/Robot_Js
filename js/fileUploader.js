@@ -37,8 +37,11 @@ MechLoader.load(
 
    
 
-
+    player2 = player.clone();
+    player2.name = 'player2';
+    // player2.position.set(-20, 4, 0)
     scene.add(player)
+    scene.add(player2)
     
 }
 );
