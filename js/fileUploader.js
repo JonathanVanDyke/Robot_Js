@@ -7,8 +7,6 @@ MechLoader.load(
     mechMesh = object.children[0]
     mechMesh.position.set(0, -4, 0);
     mechMesh.rotation.y = Math.PI;
-    // debugger
-
 
     let materials = mechMesh.material
     for (let i = 0; i < materials.length; i++) {
@@ -25,21 +23,10 @@ MechLoader.load(
     player.add(mechMesh)
     player.position.set(1, 4, 0)
     
-
-    // socket.emit('spawn', {
-    //   x: player.position.x,
-    //   y: player.position.y,
-    //   z: player.position.z,
-    //   h: player.rotation.y,
-    //   pb: player.rotation.x
-    // });
-    
-
-   
-
-    player2 = player.clone();
+    let mechMesh2 = mechMesh.clone();
+    player2.add(mechMesh2)
     player2.name = 'player2';
-    // player2.position.set(-20, 4, 0)
+
     scene.add(player)
     scene.add(player2)
     

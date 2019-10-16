@@ -54,12 +54,17 @@ Bullets.prototype.fire = (playerSpeed) => {
     // console.log(linear_velocity)
     // console.log(angular_velocity)
     // env3Block.material.wireframe = true
-    if (other_object.name === 'ground' || other_object.name === 'floorBlock' || other_object.name === 'target') {
+    if (other_object.name === 'ground' || other_object.name === 'floorBlock' || other_object.name === 'target' || other_object.name === 'player2') {
       let selectedObject = scene.getObjectByName('bullet');
       if (selectedObject) {
         console.log(other_object.name)
         
         scene.remove(selectedObject);
+      }
+
+      if (other_object.name === 'player2') {
+        p2 = scene.getObjectByName('player2')
+        scene.remove(p2);
       }
     }
     // env3Block.visible = false; // make any mesh disappear on collision...

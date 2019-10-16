@@ -142,34 +142,32 @@ function createLights() {
 function createMeshes() {
   // 07
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
-  let playerGeometry = new THREE.CubeGeometry(5, 8, 5, 0); //PRIMITIVE SHAPE AND SIZE (set 3rd val to 111 for cat paw)
+  let playerGeometry = new THREE.BoxBufferGeometry(5, 8, 5, 0); //PRIMITIVE SHAPE AND SIZE (set 3rd val to 111 for cat paw)
   let playerMaterial = new THREE.MeshLambertMaterial({
     color: 0x22CAC2,
-    transparent: true,
-    opacity: 1.0,
-    wireframe: true,
+    opacity: 0.0,
   }); //COLOR OF MESH
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
 
   // let player = new THREE.Mesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
-  player = new Physijs.BoxMesh(playerGeometry, playerMaterial, 1, 0); //MESH POINTS MAT TO GEOMETRY
+  player = new Physijs.BoxMesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
   player.add(camera)
   
-  // let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
-  // let player2Material = new THREE.MeshLambertMaterial({
-  //   color: 0x22CAC2,
-  // })
+  let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
+  let player2Material = new THREE.MeshLambertMaterial({
+    color: 0x22CAC2,
+    opacity: 0.0,
+  })
 
-  // player2 = new THREE.Mesh(player2Geometry, player2Material);
-  // player2 = player.clone();
-  // player2.position.set(0, 0, 0);
-  // player2.rotation.y = Math.PI / 4 * .25;
-  
-  player2 = player.clone();
-  // player2.rotation.y = adjustRot;
-  // scene.add(player2);
+  player2 = new Physijs.BoxMesh(playerGeometry, playerMaterial);
+
+  let TESTBlockGeometry = new THREE.BoxBufferGeometry(10, 7, 1); //PRIMITIVE SHAPE AND SIZE
+  let TESTBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff }); //COLOR OF MESH
+  let TESTBlock = new Physijs.BoxMesh(TESTBlockGeometry, TESTBlockMaterial); //MESH POINTS MAT TO GEOMETRY
+  TESTBlock.position.set(0, 10, -10);
+  scene.add(TESTBlock)
 }
 
 function createRenderer() {
@@ -199,6 +197,13 @@ function createRenderer() {
   timeTally.style.marginTop = '100';
   document.body.appendChild(timeTally);
   timeTally.innerHTML = 'Time: 0'
+
+  winnerUI = document.createElement('h1');
+  winnerUI.id = 'winner'
+  winnerUI.style.position = 'absolute';
+  winnerUI.style.marginTop = '130';
+  document.body.appendChild(winnerUI);
+  winnerUI.innerHTML = 'FIGHT!'
 
   document.body.appendChild(renderer.domElement);
 }
@@ -434,7 +439,7 @@ let animate = function (timeStamp) {
 
   // let yComp = Math.cos(zComp/xComp);
   // player2.rotateOnAxis(player2Data.h)
-
+  scene.add(player2)
   
   let adjustRot = THREE.Math.degToRad(20)
   // debugger
