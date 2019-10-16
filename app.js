@@ -51,7 +51,7 @@ io.sockets.on('connection', function (socket) {
 
     // socket.broadcast.emit('otherSpawn', data);
 
-    if (data.y > 100) {
+    // if (data.y > 100) {
       // console.log(`otherSpawn ${socket.id}`)
       // console.log(data)
 
@@ -71,7 +71,7 @@ io.sockets.on('connection', function (socket) {
       socket.userData.h = data.h;
       socket.userData.pb = data.z;
 
-    }
+    // }
     // socket.id = data.id;
     // socket.userData.x = data.x;
     // socket.userData.y = data.y;
@@ -96,10 +96,10 @@ io.sockets.on('connection', function (socket) {
     console.log(data)
   })
   setInterval(() => {
-    if (delayData.y > 200) {
+    // if (delayData.y > 200) {
       // io.sockets.emit('init', delayData);
       // console.log(delayData)
-    }
+    // }
   }, 6000)
 
 

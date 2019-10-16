@@ -1,6 +1,8 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
 let serverPackage = [];
+let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
+
 
 let RELOAD = 1000; 
 
@@ -147,16 +149,21 @@ function createMeshes() {
   }); //COLOR OF MESH
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
 
-  // //Cat mode
-  // let playerGeometry = new THREE.CubeGeometry(1, 2, 111, 100); //PRIMITIVE SHAPE AND SIZE (set 3rd val to 111 for cat paw)
-  // let playerMaterial = new THREE.MeshLambertMaterial({ color: 0x22CAC2, transparent: true, opacity: 1.0 }); //COLOR OF MESH
-  // //Cat mode
-
   // let player = new THREE.Mesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player = new Physijs.BoxMesh(playerGeometry, playerMaterial, 1, 0); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
   player.add(camera)
+
+  let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
+  let player2Material = new THREE.MeshLambertMaterial({
+    color: 0x22CAC2,
+  })
+
+  player2 = new THREE.Mesh(player2Geometry, player2Material);
+  player2.position.set(0, 0, 0);
+  player2.name = 'player2';
+  scene.add(player2);
 }
 
 function createRenderer() {
@@ -196,6 +203,12 @@ function createRenderer() {
 let animate = function (timeStamp) {
   // player.__dirtyPosition = true;
   // player.__dirtyRotation = true;
+
+  //player 2 update...
+  player2.position.x = player2Data.x;
+  player2.position.y = player2Data.y;
+  player2.position.z = player2Data.z;
+
 
   
   player.setAngularFactor(_vector);
@@ -416,8 +429,10 @@ let animate = function (timeStamp) {
   for (let i = 0; i < serverPackage.length; i++) {
     if (serverPackage[i].id !== socket.id) {
       console.log(serverPackage[i].y);
+      player2Data = serverPackage[i];
     }
   }
+  debugger
   // socket.on('otherSpawn', (data) => {
   //   // debugger
   //   if (data.y > 100) {
