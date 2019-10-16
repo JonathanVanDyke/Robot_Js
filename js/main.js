@@ -1,6 +1,5 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
 
-// const HUD = require('./hud')
 let bulletCount = 0;
 
 let RELOAD = 1000; 
