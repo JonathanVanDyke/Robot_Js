@@ -2186,7 +2186,7 @@ THREE.GLTFLoader = (function () {
 
     if (material.aoMap && geometry.attributes.uv2 === undefined && geometry.attributes.uv !== undefined) {
 
-      console.log('THREE.GLTFLoader: Duplicating UVs to support aoMap.');
+      // console.log('THREE.GLTFLoader: Duplicating UVs to support aoMap.');
       geometry.addAttribute('uv2', new THREE.BufferAttribute(geometry.attributes.uv.array, 2));
 
     }
@@ -6857,7 +6857,7 @@ Bullets.prototype.fire = (playerSpeed) => {
     if (other_object.name === 'ground' || other_object.name === 'floorBlock' || other_object.name === 'target' || other_object.name === 'player2') {
       let selectedObject = scene.getObjectByName('bullet');
       if (selectedObject) {
-        console.log(other_object.name)
+        // console.log(other_object.name)
 
         scene.remove(selectedObject);
       }
