@@ -99,7 +99,7 @@ function init() {
     y: player.position.y,
     z: player.position.z,
     h: player.rotation.y,
-    pb: player.rotation.x
+    pb: player.rotation.y
   });
 
 
@@ -146,6 +146,7 @@ function createMeshes() {
     color: 0x22CAC2,
     transparent: true,
     opacity: 0.0,
+    wireframe: true,
   }); //COLOR OF MESH
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
 
@@ -162,6 +163,7 @@ function createMeshes() {
 
   player2 = new THREE.Mesh(player2Geometry, player2Material);
   player2.position.set(0, 0, 0);
+  // player2.rotation.y = Math.PI / 4 * .25;
   player2.name = 'player2';
   scene.add(player2);
 }
@@ -203,11 +205,6 @@ function createRenderer() {
 let animate = function (timeStamp) {
   // player.__dirtyPosition = true;
   // player.__dirtyRotation = true;
-
-  //player 2 update...
-  player2.position.x = player2Data.x;
-  player2.position.y = player2Data.y;
-  player2.position.z = player2Data.z;
 
 
   
@@ -306,7 +303,7 @@ let animate = function (timeStamp) {
     player.setLinearVelocity(_vector);
 
     player.translateOnAxis(new THREE.Vector3(0, 0, playerSpeed*100), -rotateAngle)
-
+    // console.log(player.getWorldQuaternion().y)
  
 
 
@@ -412,14 +409,35 @@ let animate = function (timeStamp) {
   //   pb: player.rotation.x
   // });
 
+  let wpVector2 = new THREE.Vector3();
+  player.getWorldDirection(wpVector2).y
+
+  //player 2 update...
+  player2.position.x = player2Data.x;
+  player2.position.y = player2Data.y;
+  player2.position.z = player2Data.z;
+  player2.rotation.y = player2Data.h;
+  // player2.rotateOnAxis(new THREE.Vector3(0, 1, 0));
+  // let xComp = player.getWorldDirection(wpVector2).x;
+  // let zComp = player.getWorldDirection(wpVector2).z;
+
+  // let yComp = Math.cos(zComp/xComp);
+  // player2.rotateOnAxis(player2Data.h)
+
+  var tquaternion = new THREE.Quaternion()
+  // debugger
   socket.emit('updatedPos', {
     id: socket.id,
     x: player.position.x,
     y: player.position.y,
     z: player.position.z,
-    h: player.rotation.y,
-    pb: player.rotation.x
+    h: player.getWorldQuaternion(tquaternion).y,
+    // h: new THREE.Vector3(-player.getWorldDirection(wpVector2).x, 0, player.getWorldDirection(wpVector2).z),
+    pb: player.position.y,
   });
+  // console.log((player.getWorldDirection(wpVector2).y))
+  // let worldY = player.getWorldDirection(wpVector2).y
+  // console.log(player.getWorldDirection(wpVector2))
  
   
   socket.on('otherSpawn', (serverPack) => {
@@ -428,11 +446,11 @@ let animate = function (timeStamp) {
   // debugger
   for (let i = 0; i < serverPackage.length; i++) {
     if (serverPackage[i].id !== socket.id) {
-      console.log(serverPackage[i].y);
+      // console.log(serverPackage[i].y);
       player2Data = serverPackage[i];
     }
   }
-  debugger
+  // debugger
   // socket.on('otherSpawn', (data) => {
   //   // debugger
   //   if (data.y > 100) {

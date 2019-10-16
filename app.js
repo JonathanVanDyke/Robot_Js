@@ -100,7 +100,7 @@ io.sockets.on('connection', function (socket) {
       // io.sockets.emit('init', delayData);
       // console.log(delayData)
     // }
-  }, 6000)
+  }, 30)
 
 
 });
@@ -133,6 +133,7 @@ setInterval(function () {
         x: socket.userData.x,
         y: socket.userData.y,
         z: socket.userData.z,
+        h: socket.userData.h,
         // heading: socket.userData.heading,
         pb: socket.userData.pb,
         // action: socket.userData.action
@@ -142,7 +143,7 @@ setInterval(function () {
   console.log(`pack length: ${pack.length}`)
   console.log(`pack contents: ${pack}`)
   if (pack.length > 0) io.emit('otherSpawn', pack);
-}, 1500);
+}, 20);
 
 // setInterval(() => {
 
