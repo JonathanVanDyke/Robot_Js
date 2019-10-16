@@ -1,5 +1,5 @@
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
-
+let serverPackage = [];
 let bulletCount = 0;
 
 let RELOAD = 1000; 
@@ -79,17 +79,6 @@ function init() {
   let raycaster = new THREE.Raycaster();
   let mouse = new THREE.Vector2();
 
-  // debugger
-  // let test = socket.emit('spawn', {
-  //   id: socket.id,
-  //   x: player.position.x,
-  //   y: player.position.y,
-  //   z: player.position.z,
-  //   h: player.rotation.y,
-  //   pb: player.rotation.x
-  // });
-
-
 
   // 09
   //RENDER LOOP
@@ -99,6 +88,18 @@ function init() {
 
   clock = new THREE.Clock();
   _vector = new THREE.Vector3(0, 0, 0)
+
+
+  // debugger
+  socket.emit('init', {
+    id: socket.id,
+    x: player.position.x,
+    y: player.position.y,
+    z: player.position.z,
+    h: player.rotation.y,
+    pb: player.rotation.x
+  });
+
 
 }
 
@@ -398,14 +399,31 @@ let animate = function (timeStamp) {
   //   pb: player.rotation.x
   // });
 
-  // socket.emit('updatedPos', {
-  //   id: socket.id,
-  //   x: player.position.x,
-  //   y: player.position.y,
-  //   z: player.position.z,
-  //   h: player.rotation.y,
-  //   pb: player.rotation.x
-  // });
+  socket.emit('updatedPos', {
+    id: socket.id,
+    x: player.position.x,
+    y: player.position.y,
+    z: player.position.z,
+    h: player.rotation.y,
+    pb: player.rotation.x
+  });
+ 
+  
+  socket.on('otherSpawn', (serverPack) => {
+    serverPackage = serverPack
+  })
+  // debugger
+  for (let i = 0; i < serverPackage.length; i++) {
+    if (serverPackage[i].id !== socket.id) {
+      console.log(serverPackage[i].y);
+    }
+  }
+  // socket.on('otherSpawn', (data) => {
+  //   // debugger
+  //   if (data.y > 100) {
+  //     console.log(`Client side data: ${data.y}`)
+  //   }
+  // })
   // debugger
   // console.log(`io.sockets: ${io.sockets}`)
   // console.log(`io: ${io}`)
