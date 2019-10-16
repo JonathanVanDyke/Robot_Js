@@ -209,8 +209,8 @@ let animate = function (timeStamp) {
 
   let time = document.getElementById('time')
   // time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
-  let socketData = 'nope';
-  time.innerHTML = `Time: ${socketData}`
+  // let socketData = 'nope';
+  // time.innerHTML = `Time: ${socketData}`
 
   let start = requestAnimationFrame(animate);
 
@@ -416,10 +416,10 @@ let animate = function (timeStamp) {
   renderer.render(scene, camera);
 
 
-  socket.on('otherSpawn', (data) => {
-    socketData = data;
-    // console.log(data)
-  })
+  // socket.on('otherSpawn', (data) => {
+  //   socketData = data;
+  //   // console.log(data)
+  // })
 
 };
 
