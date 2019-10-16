@@ -4,7 +4,6 @@ let serverPackage = [];
 let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
 
-
 let RELOAD = 1000; 
 
 function reset(animate) {
