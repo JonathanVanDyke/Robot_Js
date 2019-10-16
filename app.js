@@ -1,3 +1,5 @@
+const port = process.env.PORT || 8080
+
 var express = require('express');
 var app = express()
 var http = require('http').Server(app);
@@ -25,7 +27,7 @@ io.on('playerSpawn', function (data) {
 });
 
 
-http.listen(3000, function () {
+http.listen(port, function () {
   console.log('listening on *:3000');
 });
 
