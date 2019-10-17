@@ -352,27 +352,16 @@ let animate = function (timeStamp) {
     player.__dirtyRotation = true;
   }
 
-  //bullets?
+  //Player BULLETS
   if (input.isFirePressed) {
     bullets.fire()
-    // bulletsRBlock.setLinearVelocity(new THREE.Vector3((player.rotation.y / Math.PI) * 2), 0, 0)
-    // bulletsRBlock.setLinearVelocity(new THREE.Vector3(0, 0, -100))
     let xCompensator = ((player.rotation.y / Math.PI) * -2) * 100
     let zCompensator = 100 / (xCompensator + 1)
-    // bulletsLBlock.setLinearVelocity(new THREE.Vector3(xCompensator, 0, zCompensator))
 
     let wpVector2 = new THREE.Vector3();
     bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 400, 0, player.getWorldDirection(wpVector2).z * -400))
-    // bulletsLBlock.setLinearVelocity(new THREE.Vector3(0, 0, -100))
-    // console.log(clock.getElapsedTime() - bulletsBlock.createdAt)
-    
-    // if ((clock.getElapsedTime() - bulletsBlock.createdAt) >= 5) {
-    //   debugger
-    //   delete3DOBJ('bullet')
-    // }
 
-
-    // debugger
+    //LIMITED BULLET COUNT
     for (let i = 0; i < scene.children.length; i++) {
       if (scene.children[i].name === 'bullet') {
         // debugger
@@ -391,7 +380,33 @@ let animate = function (timeStamp) {
     player.setAngularFactor(_vector);
     player.setAngularVelocity(_vector);
   }
-  
+
+  //Player2 BULLETS
+  if (player2.firing) {
+    bullets.p2fire()
+
+    let wpVector2 = new THREE.Vector3();
+    p2BulletsBlock.setLinearVelocity(new THREE.Vector3(-player2.getWorldDirection(wpVector2).x * 400, 0, player2.getWorldDirection(wpVector2).z * -400))
+
+    //LIMITED BULLET COUNT
+    for (let i = 0; i < scene.children.length; i++) {
+      if (scene.children[i].name === 'bullet') {
+        // debugger
+        bulletCount += 1
+        if (bulletCount > 100) {
+          // debugger
+          for (let i = 0; i < scene.children.length; i++) {
+            if (scene.children[i].name === 'bullet') {
+              scene.remove(scene.children[i])
+            }
+          }
+          bulletCount = 0;
+        }
+      }
+    }
+    player2.setAngularFactor(_vector);
+    player2.setAngularVelocity(_vector);
+  }
 
 
   // //GRAVITY...fix this please
@@ -424,7 +439,7 @@ let animate = function (timeStamp) {
   let wpVector2 = new THREE.Vector3();
   player.getWorldDirection(wpVector2).y
 
-  //player 2 update...
+  //PLAYER 2 UPDATE
   var tquaternion = new THREE.Quaternion()
   if (player2Data.h) {
     player2Data.h = player2Data.h
@@ -434,31 +449,22 @@ let animate = function (timeStamp) {
   player2.position.x = player2Data.x;
   player2.position.y = player2Data.y;
   player2.position.z = player2Data.z;
-  // player2.rotation.y = player2Data.h;
   player2.rotation.setFromQuaternion(player2Data.h);
-  // player2.rotateOnAxis(new THREE.Vector3(0, 1, 0));
-  // let xComp = player.getWorldDirection(wpVector2).x;
-  // let zComp = player.getWorldDirection(wpVector2).z;
+  player2.firing = player2Data.firing;
 
-  // let yComp = Math.cos(zComp/xComp);
-  // player2.rotateOnAxis(player2Data.h)
   scene.add(player2)
   
   let adjustRot = THREE.Math.degToRad(20)
-  // debugger
+  //PLAYER EMIT
   socket.emit('updatedPos', {
     id: socket.id,
     x: player.position.x,
     y: player.position.y,
     z: player.position.z,
-    // h: player.getWorldQuaternion(tquaternion).y,
     h: player.getWorldQuaternion(tquaternion),
-    // h: new THREE.Vector3(-player.getWorldDirection(wpVector2).x, 0, player.getWorldDirection(wpVector2).z),
+    firing: input.isFirePressed,
     pb: player.position.y,
   });
-  // console.log((player.getWorldDirection(wpVector2).y))
-  // let worldY = player.getWorldDirection(wpVector2).y
-  // console.log(player.getWorldDirection(wpVector2))
  
   
   socket.on('otherSpawn', (serverPack) => {
@@ -467,30 +473,15 @@ let animate = function (timeStamp) {
   // debugger
   for (let i = 0; i < serverPackage.length; i++) {
     if (serverPackage[i].id !== socket.id) {
-      // console.log(serverPackage[i].y);
       player2Data = serverPackage[i];
     }
   }
-  // debugger
-  // socket.on('otherSpawn', (data) => {
-  //   // debugger
-  //   if (data.y > 100) {
-  //     console.log(`Client side data: ${data.y}`)
-  //   }
-  // })
-  // debugger
-  // console.log(`io.sockets: ${io.sockets}`)
-  // console.log(`io: ${io}`)
+
 
   scene.simulate();
   // renderer.render(sceneHUD, cameraHUD)
   renderer.render(scene, camera);
 
-
-  // socket.on('otherSpawn', (data) => {
-  //   socketData = data;
-  //   // console.log(data)
-  // })
 
 };
 
