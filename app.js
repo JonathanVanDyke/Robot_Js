@@ -3,6 +3,8 @@ var app = express()
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+const port = process.env.PORT || 8080
+
 app.use('/js', express.static(__dirname + "/js"))
 app.use('/lib', express.static(__dirname + "/lib"))
 app.use('/dist', express.static(__dirname + "/dist"))
@@ -25,7 +27,7 @@ io.on('playerSpawn', function (data) {
 });
 
 
-http.listen(3000, function () {
+http.listen(port, function () {
   console.log('listening on *:3000');
 });
 
