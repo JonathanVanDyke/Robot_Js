@@ -3,7 +3,7 @@ function Environment() {
 
   const textureLoader = new THREE.TextureLoader();
 
-  const texture = textureLoader.load( 'textures/tron1.jpg' );
+  const texture = textureLoader.load( 'textures/dirt.png' );
 
   texture.encoding = THREE.sRGBEncoding;
 

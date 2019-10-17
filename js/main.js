@@ -3,6 +3,7 @@ let player2 = { id: null, x: 0, y: 0, z: 0, ph: 0 };
 let serverPackage = [];
 let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
+let j = 0;
 
 let RELOAD = 1000; 
 
@@ -122,6 +123,8 @@ function createLights() {
   let light2 = new THREE.AmbientLight(0xaaaaaa, 1);
   light2.position.set(0, 0, 25)
   scene.add(light2)
+
+  
   // const ambientLight = new THREE.HemisphereLight(
   //   0xddeeff,
   //   0x202020,
@@ -355,14 +358,22 @@ let animate = function (timeStamp) {
     player.__dirtyRotation = true;
   }
 
+  
   //Player BULLETS
   if (input.isFirePressed) {
-    bullets.fire()
+    
+    // if (j % 10 === 0) {
+      // console.log(j)
+      bullets.fire()
+    // }
+    // j += 1;
     let xCompensator = ((player.rotation.y / Math.PI) * -2) * 100
     let zCompensator = 100 / (xCompensator + 1)
 
     let wpVector2 = new THREE.Vector3();
-    bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 400, 0, player.getWorldDirection(wpVector2).z * -400))
+    if (bulletsLBlock.name = 'bullet') {
+      bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 300, 0, player.getWorldDirection(wpVector2).z * -300))
+    }
 
     //LIMITED BULLET COUNT
     for (let i = 0; i < scene.children.length; i++) {
@@ -386,10 +397,14 @@ let animate = function (timeStamp) {
 
   //Player2 BULLETS
   if (player2.firing) {
-    bullets.p2fire()
+    // if (j % 10 === 0) {
+      bullets.p2fire()
+    // }
 
     let wpVector2 = new THREE.Vector3();
-    p2BulletsBlock.setLinearVelocity(new THREE.Vector3(-player2.getWorldDirection(wpVector2).x * 400, 0, player2.getWorldDirection(wpVector2).z * -400))
+    if (p2BulletsBlock.name === 'bullet') {
+      p2BulletsBlock.setLinearVelocity(new THREE.Vector3(-player2.getWorldDirection(wpVector2).x * 400, 0, player2.getWorldDirection(wpVector2).z * -400))
+    }
 
     //LIMITED BULLET COUNT
     for (let i = 0; i < scene.children.length; i++) {

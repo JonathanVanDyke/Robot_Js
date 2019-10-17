@@ -25,6 +25,12 @@ MechLoader.load(
     player2.add(mechMesh2)
     player2.name = 'player2';
 
+    let lightPlayer = new THREE.DirectionalLight(0xFFFFFF, 1);
+    lightPlayer.position.set(0, 200, 0)
+    lightPlayer.target = player;
+    scene.add(lightPlayer)
+    scene.add(lightPlayer.target);
+
     scene.add(player)
     scene.add(player2)
     
