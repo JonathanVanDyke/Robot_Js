@@ -6801,6 +6801,7 @@ window.Physijs = (function () {
   return Physijs;
 })();
 
+//!bullets.js
 function Bullets() {
   self = this;
 }
@@ -6878,12 +6879,10 @@ Bullets.prototype.fire = (playerSpeed) => {
     // env3Block.visible = false; // make any mesh disappear on collision...
   });
 
-
-
-
 }
+//!bullets.js
 
-
+//!input.js
 function Input() {
   self = this;
 
@@ -6939,7 +6938,9 @@ function Input() {
   document.addEventListener("keydown", (e) => { handleKeyEvent(e, true) })
   document.addEventListener("keyup", (e) => { handleKeyEvent(e, false) })
 }
+//!input.js
 
+//!environment.js
 function Environment() {
   //Texture loader
 
@@ -7186,8 +7187,9 @@ function Environment() {
   }
 
 }
+//!environment.js
 
-
+//!fileUploader.js
 let MechLoader = new THREE.OBJLoader();
 MechLoader.load(
   'assets/mech.obj',
@@ -7242,9 +7244,10 @@ MechLoader.load(
 //     }
 // }
 // );
+//!fileUploader.js
 
 
-//Main.js
+//!MAIN.JS
 let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, clock, lastTimeStamp;
 let player2 = { id: null, x: 0, y: 0, z: 0, ph: 0 };
 let serverPackage = [];
@@ -7749,3 +7752,4 @@ init();
 animate();
 
 }
+//!MAIN.JS
