@@ -152,6 +152,7 @@ function createMeshes() {
   player = new Physijs.BoxMesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
+  player.hp = 200;
   player.add(camera)
   
   let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
@@ -177,14 +178,14 @@ function createRenderer() {
   renderer.physicallyCorrectLights = true;
   // renderer.setClearColor("#e5e5e5"); //BACKGROUND COLOR
   
-  // 04
-  //ADD CANVAS ELEMENT TO DOM
+  //SCORE
   pointTally = document.createElement('h1');
   pointTally.id = 'points'
   pointTally.style.position = 'absolute';
   document.body.appendChild(pointTally);
   pointTally.innerHTML = 'Score: 0'
 
+  //P2 HP
   opponentHP = document.createElement('h1');
   opponentHP.id = 'opponent'
   opponentHP.style.position = 'absolute';
@@ -192,7 +193,15 @@ function createRenderer() {
   document.body.appendChild(opponentHP);
   opponentHP.innerHTML = `Opponent HP: ${player2.hp}`;
 
+  //P1 HP
+  playerHP = document.createElement('h1');
+  playerHP.id = 'player'
+  playerHP.style.position = 'absolute';
+  playerHP.style.marginTop = '45';
+  document.body.appendChild(playerHP);
+  playerHP.innerHTML = `HP: ${player.hp}`;
 
+  //Time...?
   timeTally = document.createElement('h1');
   timeTally.id = 'time'
   timeTally.style.position = 'absolute';
@@ -200,6 +209,7 @@ function createRenderer() {
   document.body.appendChild(timeTally);
   timeTally.innerHTML = 'Time: 0'
 
+  //Winner text...
   winnerUI = document.createElement('h1');
   winnerUI.id = 'winner'
   winnerUI.style.position = 'absolute';
@@ -451,7 +461,8 @@ let animate = function (timeStamp) {
   player2.position.z = player2Data.z;
   player2.rotation.setFromQuaternion(player2Data.h);
   player2.firing = player2Data.firing;
-
+  player.hp = player2Data.hp;
+  debugger
   scene.add(player2)
   
   let adjustRot = THREE.Math.degToRad(20)
@@ -463,6 +474,7 @@ let animate = function (timeStamp) {
     z: player.position.z,
     h: player.getWorldQuaternion(tquaternion),
     firing: input.isFirePressed,
+    hp: player2.hp,
     pb: player.position.y,
   });
  
@@ -476,6 +488,9 @@ let animate = function (timeStamp) {
       player2Data = serverPackage[i];
     }
   }
+
+  opponent = document.getElementById('player')
+  opponent.innerHTML = `HP: ${player.hp}`;
 
 
   scene.simulate();

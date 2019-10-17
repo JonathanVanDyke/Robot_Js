@@ -47,6 +47,7 @@ io.sockets.on('connection', function (socket) {
       socket.userData.h = data.h;
       socket.userData.pb = data.z;
       socket.userData.firing = data.firing;
+      socket.userData.hp = data.hp;
 
   })
   
@@ -83,6 +84,7 @@ setInterval(function () {
         // heading: socket.userData.heading,
         pb: socket.userData.pb,
         firing: socket.userData.firing,
+        hp: socket.userData.hp,
         // action: socket.userData.action
       });
     }
