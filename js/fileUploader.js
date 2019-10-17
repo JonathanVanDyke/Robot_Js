@@ -1,5 +1,3 @@
-
-
 let MechLoader = new THREE.OBJLoader();
 MechLoader.load(
   'assets/mech.obj',

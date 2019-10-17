@@ -3,11 +3,11 @@
 <head>
   <title>Robo_js</title>
   <!-- <link rel="stylesheet" href="/css/main.css"> -->
-  <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+  <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
-  <!-- <script src="http://localhost:8080/socket.io/socket.io.js"></script> -->
-  <!-- <script src="/dist/main.js"></script>
-  <script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/dist/main.js"></script> -->
+  <!-- <script>
     let socket = io();
       // debugger
   </script> -->
@@ -16,10 +16,11 @@
 <body style=margin:0>
 
   <!-- 01 -->
+  <script src="./lib/socket.io.js"></script>
+  <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
   <!-- <script src="/socket.io/socket.io.js"></script> -->
-  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   <script>
-    let socket = io.connect();
+    let socket = io();
     // debugger
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>

@@ -1,4 +1,4 @@
-var express = require('express');
+var express = require('express'); //OK
 var app = express()
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -25,7 +25,7 @@ io.on('playerSpawn', function (data) {
 });
 
 
-http.listen(8080, function () {
+http.listen(3000, function () {
   console.log('listening on *:3000');
 });
 
