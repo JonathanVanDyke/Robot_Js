@@ -168,7 +168,7 @@ function Environment() {
     env1BIGBlock.name = 'floorBlock'
     env1TrunkBlock.name = 'floorBlock'
     
-    scene.add(env1BIGBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
+    // scene.add(env1BIGBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
     // scene.add(env1TrunkBlock); //DROP ELEMENT INTO VIRTUAL ENVIRONMENT
 
     env1BIGBlock.setAngularFactor(_vector);

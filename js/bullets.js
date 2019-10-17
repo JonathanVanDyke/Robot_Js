@@ -32,7 +32,9 @@ Bullets.prototype.fire = (playerSpeed) => {
 
       if (other_object.name === 'player2') {
         winner = document.getElementById('winner');
-        other_object.hp -= 1;
+        if (other_object.hp > 0) {
+          other_object.hp -= 1;
+        }
         opponent = document.getElementById('opponent')
         opponent.innerHTML = `Opponent HP: ${other_object.hp}`;
         if (other_object.hp <= 0) {
@@ -81,7 +83,9 @@ Bullets.prototype.p2fire = (playerSpeed) => {
 
       if (other_object.name === 'player2') {
         winner = document.getElementById('winner');
-        other_object.hp -= 1;
+        if (other_object.hp > 0) {
+          other_object.hp -= 1;
+        }
         opponent = document.getElementById('opponent')
         opponent.innerHTML = `Opponent HP: ${other_object.hp}`;
         if (other_object.hp <= 0) {

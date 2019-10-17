@@ -31,6 +31,62 @@ MechLoader.load(
 }
 );
 
+let TreeLoader = new THREE.OBJLoader();
+for (let i = 0; i < 200; i++) {
+  TreeLoader.load(
+    'assets/tree.obj',
+    function (object) {
+      treeMesh = object.children[5]
+      treeMesh.material.color.set(0x60a62e)
+      treeMesh.scale.set(3, 3, 3)
+
+      let treeGeometry = new THREE.BoxBufferGeometry(2, 60, 2); //PRIMITIVE SHAPE AND SIZE
+      var treeMaterial = Physijs.createMaterial(new THREE.MeshLambertMaterial({ color: 0xffffff }), 0, 0)
+      // let treeMaterial = new THREE.MeshLambertMaterial({ color: 0xff00C2 }); //COLOR OF MESH
+      let tree = new Physijs.BoxMesh(treeGeometry, treeMaterial, 0); //MESH POINTS MAT TO GEOMETRY
+      tree.name = 'tree';
+      tree.visible = false;
+      // tree.position.set(-53.5, 0, -25.5)
+      tree.position.set(-161.5, 0, -77)
+ 
+      tree.add(treeMesh)
+      // treeMesh.add(tree);
+      // tree.add(treeMesh)
+
+      treeMesh.position.set(0, -718*1.5, 0);
+      // treeMesh.rotation.y = Math.PI/Math.random();
+      // debugger
+      let randX = (Math.random() - 0.5) * 600;;
+      let randZ = (Math.random() - 0.5) * 600;
+  
+      // treeMesh.add(tree)
+      // treeMesh.position.x = (Math.random() - 0.5) * 600;
+      // treeMesh.position.y = -718 * 1.5
+      // treeMesh.position.z = (Math.random() - 0.5) * 600;
+      // scene.add(tree)
+
+      treeMesh.position.x += randX
+      tree.position.x += randX
+      treeMesh.position.z += randZ
+      tree.position.z += randZ
+
+      scene.add(treeMesh)
+      scene.add(tree)
+
+      tree.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
+        if (other_object.name === 'bullet') {
+          player.points += 1;
+          let pointEle = document.getElementById('points')
+          pointEle.innerHTML = `Score: ${player.points}`
+          // tree.visible = false;
+          // scene.remove(this)
+        }
+      });
+      
+  }
+  );
+}
+
 // //A huge city w/o colliders or physics 
 // let cityLoader = new THREE.OBJLoader();
 // cityLoader.load(

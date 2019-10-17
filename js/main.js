@@ -6,18 +6,11 @@ let bulletCount = 0;
 
 let RELOAD = 1000; 
 
-function reset(animate) {
-  // for (let i = scene.children.length - 1; i >= 0; i--) {
-  //   debugger
-  //     scene.remove(scene.children[i])
-  // }
-  // scene.remove.apply(scene, scene.children);
-  // init();
+function reset() {
+
   setTimeout(() => {
-    // location.reload()
+    location.reload()
   }, 3000);
-  
-  
   // animate();
   // requestAnimationFrame(animate);
 }
@@ -152,7 +145,7 @@ function createMeshes() {
   player = new Physijs.BoxMesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
-  player.hp = 200;
+  player.hp = 20;
   player.add(camera)
   
   let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
@@ -163,7 +156,7 @@ function createMeshes() {
 
   player2 = new Physijs.BoxMesh(playerGeometry, playerMaterial);
 
-  player2.hp = 200;
+  player2.hp = 20;
 }
 
 function createRenderer() {
@@ -449,6 +442,20 @@ let animate = function (timeStamp) {
   let wpVector2 = new THREE.Vector3();
   player.getWorldDirection(wpVector2).y
 
+  if (player.hp <= 0) {
+    reset();
+    // player.hp = 200;
+    // player2.hp = 200;
+    // debugger
+  }
+
+  if (player2.hp <= 0) {
+    // player.hp = 200;
+    // player2.hp = 200;
+    // debugger
+    reset();
+  }
+
   //PLAYER 2 UPDATE
   var tquaternion = new THREE.Quaternion()
   if (player2Data.h) {
@@ -462,7 +469,7 @@ let animate = function (timeStamp) {
   player2.rotation.setFromQuaternion(player2Data.h);
   player2.firing = player2Data.firing;
   player.hp = player2Data.hp;
-  debugger
+  // debugger
   scene.add(player2)
   
   let adjustRot = THREE.Math.degToRad(20)
@@ -491,6 +498,8 @@ let animate = function (timeStamp) {
 
   opponent = document.getElementById('player')
   opponent.innerHTML = `HP: ${player.hp}`;
+
+
 
 
   scene.simulate();
