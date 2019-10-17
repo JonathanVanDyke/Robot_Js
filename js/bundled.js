@@ -1,4 +1,10 @@
-window.onload = () => {
+
+
+// window.onload = () => {
+  document.addEventListener('DOMContentLoaded', () => {
+
+  
+  let socket = io.connect();
 /**
  * @author Rich Tibbett / https://github.com/richtr
  * @author mrdoob / http://mrdoob.com/
@@ -7745,4 +7751,5 @@ init();
 // CALL RENDER LOOP
 animate();
 
-}
+// }
+})
