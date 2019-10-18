@@ -4,6 +4,7 @@ let serverPackage = [];
 let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
 let j = 0;
+let p1radar;
 
 let RELOAD = 1000; 
 
@@ -574,10 +575,32 @@ let animate = function (timeStamp) {
     }
   }
 
+  
   opponent = document.getElementById('player')
   opponent.innerHTML = `HP: ${player.hp}`;
 
+  //RADAR_P1
+  let radarX = player.position.x / 300 + 7;
+  let radarY = player.position.y / 300 + 8;
+  let radarZ = player.position.z / 300;
 
+  
+  if (radarX > 5 && radarX < 8 && radarY > 6 && radarY < 9 && radarZ > -2 && radarZ < 2) {
+    p1radar.position.x = radarX;
+    p1radar.position.y = radarY;
+    p1radar.position.z = radarZ;
+  }
+
+  let radarX2 = player2.position.x / 300 + 7;
+  let radarY2 = player2.position.y / 300 + 8;
+  let radarZ2 = player2.position.z / 300;
+
+  //RADAR_P1
+  if (radarX2 > 5 && radarX2 < 8 && radarY2 > 6 && radarY2 < 9 && radarZ2 > -2 && radarZ2 < 2) {
+    p2radar.position.x = radarX2;
+    p2radar.position.y = radarY2;
+    p2radar.position.z = radarZ2;
+  }
 
 
   scene.simulate();

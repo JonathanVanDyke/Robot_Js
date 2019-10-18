@@ -35,6 +35,7 @@ MechLoader.load(
     scene.add(player)
     scene.add(player2)
 
+    //RADAR
     let radarGeometry = new THREE.SphereGeometry(2, 20, 20);
     let radarMaterial = new THREE.MeshLambertMaterial({
       color: 0x22CAC2,
@@ -47,6 +48,7 @@ MechLoader.load(
     radar.position.set(7, 8, 0);
     player.add(radar);
 
+    //P1 RADAR
     let p1radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
     let p1radarMaterial = new THREE.MeshLambertMaterial({
       color: 0x00ff6a,
@@ -54,9 +56,21 @@ MechLoader.load(
       transparent: true,
     })
 
-    let p1radar = new THREE.Mesh(p1radarGeometry, p1radarMaterial); //MESH POINTS MAT TO GEOMETRY
+    p1radar = new THREE.Mesh(p1radarGeometry, p1radarMaterial); //MESH POINTS MAT TO GEOMETRY
     p1radar.position.set(7, 8, 0);
     player.add(p1radar);
+    
+    //P2 RADAR
+    let p2radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
+    let p2radarMaterial = new THREE.MeshLambertMaterial({
+      color: 0xff2a00,
+      opacity: 0.5,
+      transparent: true,
+    })
+
+    p2radar = new THREE.Mesh(p2radarGeometry, p2radarMaterial); //MESH POINTS MAT TO GEOMETRY
+    p2radar.position.set(7, 8, 0);
+    player.add(p2radar);
     
 }
 );
