@@ -7,6 +7,10 @@ let j = 0;
 
 let RELOAD = 1000; 
 
+var stats = new Stats();
+stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom);
+
 function reset() {
 
   setTimeout(() => {
@@ -224,7 +228,7 @@ function createRenderer() {
 let animate = function (timeStamp) {
   // player.__dirtyPosition = true;
   // player.__dirtyRotation = true;
-
+  stats.begin();
 
   
   player.setAngularFactor(_vector);
@@ -521,6 +525,7 @@ let animate = function (timeStamp) {
   scene.simulate();
   // renderer.render(sceneHUD, cameraHUD)
   renderer.render(scene, camera);
+  stats.end();
 
 
 };
