@@ -41,7 +41,7 @@ function init() {
   crosshair.id = 'cross'
   crosshair.style.cssText = `
   position: absolute;
-  left: 49.5%;
+  left: 49.75%;
   font-size: 10px;
   font-family: fantasy;
   top: 40%;
