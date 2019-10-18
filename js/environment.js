@@ -197,7 +197,7 @@ function Environment() {
       if (other_object.name === 'bullet') {
         player.points += this.points;
         let pointEle = document.getElementById('points')
-        pointEle.innerHTML = `Score: ${player.points}`
+        // pointEle.innerHTML = `Score: ${player.points}`
         // TargetBlock.visible = false;
         scene.remove(this);
       }

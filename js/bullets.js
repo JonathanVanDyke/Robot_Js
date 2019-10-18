@@ -81,7 +81,7 @@ Bullets.prototype.p2fire = (playerSpeed) => {
         scene.remove(selectedObject);
       }
 
-      if (other_object.name === 'player2') {
+      if (other_object.name === 'player1') {
         winner = document.getElementById('winner');
         if (other_object.hp > 0) {
           other_object.hp -= 1;

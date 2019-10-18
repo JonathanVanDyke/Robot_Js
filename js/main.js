@@ -9,7 +9,7 @@ let RELOAD = 1000;
 
 var stats = new Stats();
 stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom);
+// document.body.appendChild(stats.dom);
 
 function reset() {
 
@@ -33,7 +33,7 @@ function init() {
   scene = new Physijs.Scene;
 
   // let scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 20 }); //Slow down scene to fix rotation bug
-  scene.setGravity(new THREE.Vector3(0, -5, 0));
+  scene.setGravity(new THREE.Vector3(0, -15, 0));
   {
     const color = 'black';  // white
     const near = 90;
@@ -179,19 +179,35 @@ function createRenderer() {
   renderer.physicallyCorrectLights = true;
   // renderer.setClearColor("#e5e5e5"); //BACKGROUND COLOR
   
-  //SCORE
-  pointTally = document.createElement('h1');
-  pointTally.id = 'points'
-  pointTally.style.position = 'absolute';
-  document.body.appendChild(pointTally);
-  pointTally.innerHTML = 'Score: 0'
+  //HUD
+  hud = document.getElementById('hud');
+  hud.style.cssText = `
+    display: flex;
+  `;
+
+  
+
+  // //SCORE
+  // pointTally = document.createElement('h1');
+  // pointTally.id = 'points'
+  // pointTally.style.cssText = `
+  //   position: absolute;
+  // `; 
+  // document.body.appendChild(pointTally);
+  // pointTally.innerHTML = 'Score: 0'
 
   //P2 HP
   opponentHP = document.createElement('h1');
   opponentHP.id = 'opponent'
   opponentHP.style.position = 'absolute';
   opponentHP.style.marginTop = '70';
-  document.body.appendChild(opponentHP);
+  opponentHP.style.cssText = `
+    margin: 75px 20px 20px;
+    position: absolute;
+    transform: skewY(-9deg);
+  `
+  // document.body.appendChild(opponentHP);
+  hud.appendChild(opponentHP);
   opponentHP.innerHTML = `Opponent HP: ${player2.hp}`;
 
   //P1 HP
@@ -199,16 +215,51 @@ function createRenderer() {
   playerHP.id = 'player'
   playerHP.style.position = 'absolute';
   playerHP.style.marginTop = '45';
-  document.body.appendChild(playerHP);
+  playerHP.style.cssText = `
+    margin: 20px;
+    position: absolute;
+    transform: skewY(-9deg);
+  `
+  hud.appendChild(playerHP);
   playerHP.innerHTML = `HP: ${player.hp}`;
 
-  //Time...?
-  timeTally = document.createElement('h1');
-  timeTally.id = 'time'
-  timeTally.style.position = 'absolute';
-  timeTally.style.marginTop = '100';
-  document.body.appendChild(timeTally);
-  timeTally.innerHTML = 'Time: 0'
+  //P1 HP BAR
+  p1hpBar = document.createElement('div');
+  p1hpBar.id = 'p1hpbar';
+  p1hpBar.style.cssText = `
+    margin: 55px 20px 45px;
+    opacity: 0.75;
+    height: 9px;
+    border: 2px solid black;
+    width: ${player.hp * 10}px;
+    position: absolute;
+    background-color: green;
+    transform: skewY(-9deg);
+  `;
+
+  hud.appendChild(p1hpBar);
+  //p2 HP BAR
+  p2hpBar = document.createElement('div');
+  p2hpBar.id = 'p2hpbar';
+  p2hpBar.style.cssText = `
+    margin: 121px 20px 45px;
+    opacity: 0.75;
+    height: 9px;
+    border: 2px solid black;
+    width: ${player2.hp * 10}px;
+    position: absolute;
+    background-color: red;
+    transform: skewY(-9deg);
+  `;
+  hud.appendChild(p2hpBar);
+
+  // //Time...?
+  // timeTally = document.createElement('h1');
+  // timeTally.id = 'time'
+  // timeTally.style.position = 'absolute';
+  // timeTally.style.marginTop = '100';
+  // document.body.appendChild(timeTally);
+  // timeTally.innerHTML = 'Time: 0'
 
   //Winner text...
   winnerUI = document.createElement('h1');
@@ -216,6 +267,11 @@ function createRenderer() {
   winnerUI.style.position = 'absolute';
   winnerUI.style.marginTop = '130';
   document.body.appendChild(winnerUI);
+  winnerUI.style.cssText = `
+    transform: skewY(-9deg);
+    margin: 161px 20px;
+    position: absolute;
+  `
   winnerUI.innerHTML = 'FIGHT!'
 
 
@@ -226,8 +282,10 @@ function createRenderer() {
 
 
 let animate = function (timeStamp) {
-  // player.__dirtyPosition = true;
-  // player.__dirtyRotation = true;
+  let p1bar = document.getElementById('p1hpbar')
+  p1bar.style.width = `${player.hp * 10}px`
+  let p2bar = document.getElementById('p2hpbar')
+  p2bar.style.width = `${player2.hp * 10}px`
   stats.begin();
 
   
@@ -300,7 +358,7 @@ let animate = function (timeStamp) {
     player.setLinearVelocity(_vector);
     player.setAngularFactor(_vector);
     player.setAngularVelocity(_vector);
-    player.translateOnAxis(new THREE.Vector3(0, -movementSpeed * 1000, 0), -rotateAngle)
+    player.translateOnAxis(new THREE.Vector3(0, -movementSpeed * 100, 0), -rotateAngle)
     // player.position.y += playerSpeed*2;
   }
 
@@ -308,7 +366,7 @@ let animate = function (timeStamp) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
     if (player.position.y > 4.5) {
-      player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 200, 0), -rotateAngle)
+      player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 100, 0), -rotateAngle)
       player.setAngularFactor(_vector);
       player.setAngularVelocity(_vector);
     }
@@ -377,7 +435,7 @@ let animate = function (timeStamp) {
 
     let wpVector2 = new THREE.Vector3();
     if (bulletsLBlock.name = 'bullet') {
-      bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 300, 0, player.getWorldDirection(wpVector2).z * -300))
+      bulletsLBlock.setLinearVelocity(new THREE.Vector3(-player.getWorldDirection(wpVector2).x * 500, 0, player.getWorldDirection(wpVector2).z * -500))
     }
 
     //LIMITED BULLET COUNT
@@ -385,7 +443,7 @@ let animate = function (timeStamp) {
       if (scene.children[i].name === 'bullet') {
         // debugger
         bulletCount += 1
-        if (bulletCount > 100) {
+        if (bulletCount > 200) {
           // debugger
           for (let i = 0; i < scene.children.length; i++) {
             if (scene.children[i].name === 'bullet') {
