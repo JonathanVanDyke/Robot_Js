@@ -662,14 +662,16 @@ let animate = function (timeStamp) {
 
   //HPBAR
   hpBar.scale.x = (.25 * player.hp) / 5
-  hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+  // hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+  // hpBar.position.x = 4;
 
   // //HPTEXT
   // hpTxt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+  // hpTxt.position.x = 4;
   
   //HP2BAR
   hp2Bar.scale.x = (.25 * player2.hp) / 5
-  hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+  // hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
 
   // //HP2TEXT
   // hp2Txt.position.x = - ResizeWidthRatio * window.innerWidth + 4;

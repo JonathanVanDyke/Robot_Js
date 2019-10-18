@@ -7646,7 +7646,7 @@ window.onload = () => {
       })
 
       hpBar = new THREE.Mesh(hpBarGeometry, hpBarMaterial); //MESH POINTS MAT TO GEOMETRY
-      hpBar.position.set(0, 9, 0);
+      hpBar.position.set(-8, 9, 0);
       // let ResizeWidthRatio = - 8 / 626;
       // hpBar.position.x = ResizeWidthRatio * window.innerWidth
       // console.log(`X position: ${hpBar.position.x}`)
@@ -7698,7 +7698,7 @@ window.onload = () => {
       })
 
       hp2Bar = new THREE.Mesh(hp2BarGeometry, hp2BarMaterial); //MESH POINTS MAT TO GEOMETRY
-      hp2Bar.position.set(0, 6, 0);
+      hp2Bar.position.set(-8, 6, 0);
       // let ResizeWidthRatio = - 8 / 626;
       // hp2Bar.position.x = ResizeWidthRatio * window.innerWidth
       // console.log(`X position: ${hp2Bar.position.x}`)
@@ -7824,7 +7824,7 @@ window.onload = () => {
 
 
   //!MAIN.JS
-  let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, clock, lastTimeStamp;
+  let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
   let player2 = { id: null, x: 0, y: 0, z: 0, ph: 0 };
   let serverPackage = [];
   let player2Data = { id: null, x: 0, y: 0, z: 0, ph: 0 };
@@ -8488,14 +8488,16 @@ window.onload = () => {
 
     //HPBAR
     hpBar.scale.x = (.25 * player.hp) / 5
-    hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+    // hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+    // hpBar.position.x = 4;
 
     // //HPTEXT
     // hpTxt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+    // hpTxt.position.x = 4;
 
     //HP2BAR
     hp2Bar.scale.x = (.25 * player2.hp) / 5
-    hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+    // hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
 
     // //HP2TEXT
     // hp2Txt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
@@ -8514,6 +8516,4 @@ window.onload = () => {
   // 11 
   //...10 is mouse event listener, 12 is adding listener to window)...
   // CALL RENDER LOOP
-  animate()
-
-}
+  animate();

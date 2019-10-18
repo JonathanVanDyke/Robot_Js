@@ -122,7 +122,7 @@ MechLoader.load(
     })
 
     hpBar = new THREE.Mesh(hpBarGeometry, hpBarMaterial); //MESH POINTS MAT TO GEOMETRY
-    hpBar.position.set(0, 9, 0);
+    hpBar.position.set(-8, 9, 0);
     // let ResizeWidthRatio = - 8 / 626;
     // hpBar.position.x = ResizeWidthRatio * window.innerWidth
     // console.log(`X position: ${hpBar.position.x}`)
@@ -174,7 +174,7 @@ MechLoader.load(
     })
 
     hp2Bar = new THREE.Mesh(hp2BarGeometry, hp2BarMaterial); //MESH POINTS MAT TO GEOMETRY
-    hp2Bar.position.set(0, 6, 0);
+    hp2Bar.position.set(-8, 6, 0);
     // let ResizeWidthRatio = - 8 / 626;
     // hp2Bar.position.x = ResizeWidthRatio * window.innerWidth
     // console.log(`X position: ${hp2Bar.position.x}`)
