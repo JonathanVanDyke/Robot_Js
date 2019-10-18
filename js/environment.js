@@ -150,9 +150,9 @@ function Environment() {
 
     env3Block.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
       if (other_object.name === 'bullet') {
-        player.points += 1;
-        let pointEle = document.getElementById('points')
-        pointEle.innerHTML = `Score: ${player.points}`
+        // player.points += 1;
+        // let pointEle = document.getElementById('points')
+        // pointEle.innerHTML = `Score: ${player.points}`
         env3Block.visible = false;
       }
     });
@@ -195,7 +195,7 @@ function Environment() {
 
     TargetBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
       if (other_object.name === 'bullet') {
-        player.points += this.points;
+        // player.points += this.points;
         let pointEle = document.getElementById('points')
         // pointEle.innerHTML = `Score: ${player.points}`
         // TargetBlock.visible = false;
@@ -243,7 +243,7 @@ function Environment() {
       if (other_object.name === 'bullet') {
         env1BIGBlock.hp -= 1;
         if (env1BIGBlock.hp === 0) {
-          player.points += 100;
+          // player.points += 100;
           let pointEle = document.getElementById('points')
           pointEle.innerHTML = `Score: ${player.points}`
           scene.remove(this)
@@ -256,7 +256,7 @@ function Environment() {
       if (other_object.name === 'bullet') {
         env1BIGBlock.hp -= 1;
         if (env1BIGBlock.hp === 0) {
-          player.points += 10;
+          // player.points += 10;
           let pointEle = document.getElementById('points')
           pointEle.innerHTML = `Score: ${player.points}`
           env1BIGBlock.visible = false;
@@ -285,7 +285,7 @@ function Environment() {
 
       env4Block.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
         if (other_object.name === 'bullet') {
-          player.points += 1;
+          // player.points += 1;
           let pointEle = document.getElementById('points')
           pointEle.innerHTML = `Score: ${player.points}`
           // env4Block.visible = false;

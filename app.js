@@ -92,4 +92,4 @@ setInterval(function () {
   console.log(`pack length: ${pack.length}`)
   console.log(`pack contents: ${pack}`)
   if (pack.length > 0) io.emit('otherSpawn', pack);
-}, 20);
+}, 15);

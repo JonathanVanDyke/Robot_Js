@@ -4,11 +4,13 @@ let serverPackage = [];
 let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
 let j = 0;
+let radar;
 let p1radar;
 p1radar = {position: {x: 0, y: 0, z: 0}};
 let p2radar;
 p2radar = {position: {x: 0, y: 0, z: 0}};
-let hpBar;
+let hpBar, hpTxt = { position: { x: 0, y: 0, z: 0 } };;
+let hpBar2, hp2Txt = { position: { x: 0, y: 0, z: 0 } };;
 
 let RELOAD = 1000; 
 
@@ -19,13 +21,33 @@ stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
 function reset() {
 
   setTimeout(() => {
-    location.reload()
-  }, 3000);
+    player.hp = 20;
+    player2.hp = 20;
+    let pointEle = document.getElementById('points')
+    player.points2 += 1;
+    pointEle.innerHTML = `Score: ${player.points2}`
+    // player.position.set(0, 20, 0);
+    // player2.position.set(0, 20, 0);
+    // location.reload()
+    // animate().reset();
+  }, 0);
   // animate();
   // requestAnimationFrame(animate);
 }
 
 function init() {
+  //Crosshair
+  crosshair = document.createElement('h1');
+  crosshair.id = 'cross'
+  crosshair.style.cssText = `
+  position: absolute;
+  left: 49.5%;
+  font-size: 10px;
+  font-family: fantasy;
+  top: 40%;
+  `;
+  document.body.appendChild(crosshair);
+  crosshair.innerHTML = 'X'
   
 
   // 201 
@@ -160,6 +182,7 @@ function createMeshes() {
   player.name = 'player';
   player.hp = 20;
   player.add(camera)
+  player.points2 = 0;
   
   let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
   let player2Material = new THREE.MeshLambertMaterial({
@@ -192,14 +215,35 @@ function createRenderer() {
 
   
 
-  // //SCORE
-  // pointTally = document.createElement('h1');
-  // pointTally.id = 'points'
-  // pointTally.style.cssText = `
-  //   position: absolute;
-  // `; 
-  // document.body.appendChild(pointTally);
-  // pointTally.innerHTML = 'Score: 0'
+  //SCORE
+  pointTally = document.createElement('h1');
+  pointTally.id = 'points'
+  pointTally.style.cssText = `
+    position: absolute;
+    bottom: 0;
+    text-transform: uppercase;
+    font-size: 20px;
+    // margin-left: 20px;
+    margin: 0 auto;
+  `; 
+  document.body.appendChild(pointTally);
+  pointTally.innerHTML = 'Score: 0'
+
+  //INSTRUCTIONS
+  pointTally = document.createElement('h1');
+  pointTally.id = 'instructions'
+  pointTally.style.cssText = `
+    position: absolute;
+    bottom: 0px;
+    font-family: monospace;
+    right: 0px;
+    text-transform: uppercase;
+    font-size: 18px;
+    /* margin: 0px auto; */
+    margin: 10px;
+  `; 
+  document.body.appendChild(pointTally);
+  pointTally.innerHTML = 'W/A/S/D: Move <br /> Q/E: Rotate <br /> J: Fire <br /> SPACE: Fly <br /> K: Descend'
 
   //P2 HP
   opponentHP = document.createElement('h1');
@@ -212,7 +256,7 @@ function createRenderer() {
     transform: skewY(-9deg);
   `
   // document.body.appendChild(opponentHP);
-  hud.appendChild(opponentHP);
+  // hud.appendChild(opponentHP);
   opponentHP.innerHTML = `Opponent HP: ${player2.hp}`;
 
   //P1 HP
@@ -225,8 +269,12 @@ function createRenderer() {
     position: absolute;
     transform: skewY(-9deg);
   `
-  hud.appendChild(playerHP);
-  playerHP.innerHTML = `HP: ${player.hp}`;
+  // hud.appendChild(playerHP);
+  if (player.hp) {
+    playerHP.innerHTML = `HP: ${player.hp}`;
+  } else {
+    playerHP.innerHTML = `HP: 20`;
+  }
 
   // //P1 HP BAR
   // p1hpBar = document.createElement('div');
@@ -246,19 +294,19 @@ function createRenderer() {
 
 
   //p2 HP BAR
-  p2hpBar = document.createElement('div');
-  p2hpBar.id = 'p2hpbar';
-  p2hpBar.style.cssText = `
-    margin: 121px 20px 45px;
-    opacity: 0.75;
-    height: 9px;
-    border: 2px solid black;
-    width: ${player2.hp * 10}px;
-    position: absolute;
-    background-color: red;
-    transform: skewY(-9deg);
-  `;
-  hud.appendChild(p2hpBar);
+  // p2hpBar = document.createElement('div');
+  // p2hpBar.id = 'p2hpbar';
+  // p2hpBar.style.cssText = `
+  //   margin: 121px 20px 45px;
+  //   opacity: 0.75;
+  //   height: 9px;
+  //   border: 2px solid black;
+  //   width: ${player2.hp * 10}px;
+  //   position: absolute;
+  //   background-color: red;
+  //   transform: skewY(-9deg);
+  // `;
+  // hud.appendChild(p2hpBar);
 
   // //Time...?
   // timeTally = document.createElement('h1');
@@ -273,7 +321,7 @@ function createRenderer() {
   winnerUI.id = 'winner'
   winnerUI.style.position = 'absolute';
   winnerUI.style.marginTop = '130';
-  document.body.appendChild(winnerUI);
+  // document.body.appendChild(winnerUI);
   winnerUI.style.cssText = `
     transform: skewY(-9deg);
     margin: 161px 20px;
@@ -527,19 +575,19 @@ let animate = function (timeStamp) {
   let wpVector2 = new THREE.Vector3();
   player.getWorldDirection(wpVector2).y
 
-  if (player.hp <= 0) {
+  if (player.hp <= 0 || player2.hp <= 0) {
     reset();
     // player.hp = 200;
     // player2.hp = 200;
     // debugger
   }
 
-  if (player2.hp <= 0) {
-    // player.hp = 200;
-    // player2.hp = 200;
-    // debugger
-    reset();
-  }
+  // if (player2.hp <= 0) {
+  //   // player.hp = 200;
+  //   // player2.hp = 200;
+  //   // debugger
+  //   reset();
+  // }
 
   //PLAYER 2 UPDATE
   var tquaternion = new THREE.Quaternion()
@@ -553,7 +601,7 @@ let animate = function (timeStamp) {
   player2.position.z = player2Data.z;
   player2.rotation.setFromQuaternion(player2Data.h);
   player2.firing = player2Data.firing;
-  player.hp = player2Data.hp;
+  player.hp = player2Data.hp || 20;
   // debugger
   scene.add(player2)
   
@@ -582,22 +630,24 @@ let animate = function (timeStamp) {
   }
 
   
-  opponent = document.getElementById('player')
-  opponent.innerHTML = `HP: ${player.hp}`;
+  // opponent = document.getElementById('player')
+  // opponent.innerHTML = `HP: ${player.hp}`;
 
+  let ResizeWidthRatio = 8 / 626;
   //RADAR_P1
   let radarX = player.position.x / 300 + 7;
   let radarY = player.position.y / 300 + 8;
   let radarZ = player.position.z / 300;
+  // radar.position.x = ResizeWidthRatio * window.innerWidth - 3;
 
   
   if (radarX > 5 && radarX < 8 && radarY > 6 && radarY < 9 && radarZ > -2 && radarZ < 2) {
     p1radar.position.x = radarX;
     p1radar.position.y = radarY;
     p1radar.position.z = radarZ;
-    p1radar.rotation.setFromQuaternion(player.getWorldQuaternion(tquaternion));
   }
-
+  p1radar.rotation.setFromQuaternion(player.getWorldQuaternion(tquaternion));
+  
   let radarX2 = player2.position.x / 300 + 7;
   let radarY2 = player2.position.y / 300 + 8;
   let radarZ2 = player2.position.z / 300;
@@ -607,13 +657,22 @@ let animate = function (timeStamp) {
     p2radar.position.x = radarX2;
     p2radar.position.y = radarY2;
     p2radar.position.z = radarZ2;
-    p2radar.rotation.setFromQuaternion(player2.getWorldQuaternion(tquaternion));
   }
+  p2radar.rotation.setFromQuaternion(player2.getWorldQuaternion(tquaternion));
 
   //HPBAR
   hpBar.scale.x = (.25 * player.hp) / 5
-  let ResizeWidthRatio = - 8 / 626;
-  hpBar.position.x = ResizeWidthRatio * window.innerWidth + 4;
+  hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+
+  // //HPTEXT
+  // hpTxt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+  
+  //HP2BAR
+  hp2Bar.scale.x = (.25 * player2.hp) / 5
+  hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
+
+  // //HP2TEXT
+  // hp2Txt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
 
 
   scene.simulate();

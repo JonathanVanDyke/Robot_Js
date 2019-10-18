@@ -15,7 +15,7 @@ MechLoader.load(
         mechMesh.material[i].color.set(0xf5d742);
       }
     }
-    player.points = 0;
+    player.points2 = 0;
     player.position.set(0, 10, 0);
     // player.material.wireframe = true;
 
@@ -29,6 +29,7 @@ MechLoader.load(
     let lightPlayer = new THREE.DirectionalLight(0xFFFFFF, 1);
     lightPlayer.position.set(0, 200, 0)
     lightPlayer.target = player;
+    player.hp = 20;
     scene.add(lightPlayer)
     scene.add(lightPlayer.target);
 
@@ -44,7 +45,7 @@ MechLoader.load(
       wireframe: true,
     })
 
-    let radar = new THREE.Mesh(radarGeometry, radarMaterial); //MESH POINTS MAT TO GEOMETRY
+    radar = new THREE.Mesh(radarGeometry, radarMaterial); //MESH POINTS MAT TO GEOMETRY
     radar.position.set(7, 8, 0);
     player.add(radar);
 
@@ -77,6 +78,41 @@ MechLoader.load(
     p2radar.position.set(7, 8, 0);
     player.add(p2radar);
 
+    // //HP TEXT
+    // var loader = new THREE.FontLoader();
+
+    // let hpTxt;
+    // loader.load('assets/text/helvetiker_regular.typeface.json', function (font) {
+
+    //   var hpgeometry = new THREE.TextGeometry('H P', {
+    //     font: font,
+    //     size: 40,
+    //     height: 5,
+    //     curveSegments: 12,
+    //     bevelEnabled: true,
+    //     bevelThickness: 10,
+    //     bevelSize: 2,
+    //     bevelOffset: 0,
+    //     bevelSegments: 5
+    //   });
+
+    //   let hpBarMaterial = new THREE.MeshLambertMaterial({
+    //     color: 0x00ff6a,
+    //     opacity: 0.75,
+    //     transparent: true,
+    //   })
+
+    //   hpTxt = new THREE.Mesh(hpgeometry, hpBarMaterial)
+    //   // debugger
+    //   hpTxt.scale.set(.01, .01, .01)
+    //   hpTxt.position.set(-9, 9.5, 0)
+    //   hpTxt.rotation.y = Math.PI / 2 * .5
+    //   hpTxt.rotation.x = Math.PI / 2 * .25
+    //   player.add(hpTxt)
+
+    //   // scene.add(hpTxt);
+    // });
+
     //P1 Health Bar
     let hpBarGeometry = new THREE.BoxGeometry(5, .5, .5);
     let hpBarMaterial = new THREE.MeshLambertMaterial({
@@ -89,11 +125,67 @@ MechLoader.load(
     hpBar.position.set(0, 9, 0);
     // let ResizeWidthRatio = - 8 / 626;
     // hpBar.position.x = ResizeWidthRatio * window.innerWidth
-    console.log(`X position: ${hpBar.position.x}`)
+    // console.log(`X position: ${hpBar.position.x}`)
     hpBar.rotation.y = Math.PI/2 * .5
     hpBar.rotation.x = Math.PI/2 * .25
     player.add(hpBar);
+
+    // //HP2 TEXT
+    // var loader = new THREE.FontLoader();
+
+    // let hp2Txt;
+    // loader.load('assets/text/helvetiker_regular.typeface.json', function (font) {
+
+    //   var hp2geometry = new THREE.TextGeometry('O P P O N E N T  H P :', {
+    //     font: font,
+    //     size: 40,
+    //     height: 5,
+    //     curveSegments: 12,
+    //     bevelEnabled: true,
+    //     bevelThickness: 10,
+    //     bevelSize: 2,
+    //     bevelOffset: 0,
+    //     bevelSegments: 5
+    //   });
+
+    //   let hp2BarMaterial = new THREE.MeshLambertMaterial({
+    //     color: 0xff2e2e,
+    //     opacity: 0.75,
+    //     transparent: true,
+    //   })
+
+    //   hp2Txt = new THREE.Mesh(hp2geometry, hp2BarMaterial)
+    //   // debugger
+    //   hp2Txt.scale.set(.01, .01, .01)
+    //   hp2Txt.position.set(-9, 6, 0)
+    //   hp2Txt.rotation.y = Math.PI / 2 * .5
+    //   hp2Txt.rotation.x = Math.PI / 2 * .25
+    //   player.add(hp2Txt)
+
+    //   // scene.add(hpTxt);
+    // });
+
+    //P2 Health Bar
+    let hp2BarGeometry = new THREE.BoxGeometry(5, .5, .5);
+    let hp2BarMaterial = new THREE.MeshLambertMaterial({
+      color: 0xff2e2e,
+      opacity: 0.75,
+      transparent: true,
+    })
+
+    hp2Bar = new THREE.Mesh(hp2BarGeometry, hp2BarMaterial); //MESH POINTS MAT TO GEOMETRY
+    hp2Bar.position.set(0, 6, 0);
+    // let ResizeWidthRatio = - 8 / 626;
+    // hp2Bar.position.x = ResizeWidthRatio * window.innerWidth
+    // console.log(`X position: ${hp2Bar.position.x}`)
+    hp2Bar.rotation.y = Math.PI/2 * .5
+    hp2Bar.rotation.x = Math.PI/2 * .25
+    player.add(hp2Bar);
+
+
+
     
+
 }
 );
 
@@ -141,9 +233,9 @@ for (let i = 0; i < 0; i++) {
 
       tree.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
         if (other_object.name === 'bullet') {
-          player.points += 1;
-          let pointEle = document.getElementById('points')
-          pointEle.innerHTML = `Score: ${player.points}`
+          // player.points += 1;
+          // let pointEle = document.getElementById('points')
+          // pointEle.innerHTML = `Score: ${player.points}`
           // tree.visible = false;
           // scene.remove(this)
         }
@@ -174,3 +266,33 @@ for (let i = 0; i < 0; i++) {
 //     }
 // }
 // );
+
+// //TEXT LOADING
+// var loader = new THREE.FontLoader();
+
+// loader.load('assets/text/helvetiker_regular.typeface.json', function (font) {
+
+//   var hpgeometry = new THREE.TextGeometry('HP', {
+//     font: font,
+//     size: 80,
+//     height: 5,
+//     curveSegments: 12,
+//     bevelEnabled: true,
+//     bevelThickness: 10,
+//     bevelSize: 8,
+//     bevelOffset: 0,
+//     bevelSegments: 5
+//   });
+
+//   let hpBarMaterial = new THREE.MeshLambertMaterial({
+//     color: 0x00ff6a,
+//     opacity: 0.75,
+//     transparent: true,
+//   })
+
+//   hpTxt = new THREE.Mesh(hpgeometry, hpBarMaterial)
+//   // hpTxt.scale.set(.01, .01, .01)
+//   hpTxt.position.set(0,3,0)
+  
+//   scene.add(hpTxt);
+// });
