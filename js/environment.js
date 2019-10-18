@@ -1,4 +1,28 @@
 function Environment() {
+
+  //TERRAIN TEXTURES
+  var Tmaterial = new THREE.MeshPhongMaterial({
+    map: THREE.ImageUtils.loadTexture('../assets/jotunheimen-texture.jpg')
+  });
+
+  //TERRAIN
+  var terrainLoader = new THREE.TerrainLoader();
+  terrainLoader.load('../assets/jotunheimen.bin', function (data) {
+    var geometry = new THREE.PlaneGeometry(60, 60, 199, 199);
+    for (var i = 0, l = geometry.vertices.length; i < l; i++) {
+      geometry.vertices[i].z = data[i] / 65535 * 10;
+    }
+    // var material = new THREE.MeshPhongMaterial({
+    //   color: 0xdddddd,
+      // wireframe: true
+    // });
+    var plane = new Physijs.PlaneMesh(geometry, Tmaterial, 0, 0);
+    plane.rotation.x = -Math.PI / 2;
+    plane.position.y = -120;
+    plane.scale.set(12, 12, 12)
+    scene.add(plane);
+  });
+
   //CubeMap
   // var loader = new THREE.CubeTextureLoader();
   // loader.setPath('textures/cube/pisa/');
@@ -77,20 +101,20 @@ function Environment() {
 
   //GROUND
   let groundGeometry = new THREE.PlaneGeometry(1000, 1000, 0); //PRIMITIVE SHAPE AND SIZE
-  let groundMaterial = new THREE.MeshBasicMaterial({ color: 'black' }); //COLOR OF MESH
+  let groundMaterial = new THREE.MeshBasicMaterial({ color: 'black', visible: false }); //COLOR OF MESH
   // let ground = new THREE.Mesh(groundGeometry, groundMaterial); //MESH POINTS MAT TO GEOMETRY
 
 
   var friction = 0.8; // high friction
   var restitution = 0.3; // low restitution
 
-  var material = Physijs.createMaterial(
-    new THREE.MeshBasicMaterial({ color: 0x888888 }),
-    friction,
-    restitution
-  );
+  // var material = Physijs.createMaterial(
+  //   new THREE.MeshBasicMaterial({ color: 0x888888 }),
+  //   friction,
+  //   restitution,
+  // );
 
-  let ground = new Physijs.PlaneMesh(groundGeometry, materialMap, 0, 0); //MESH POINTS MAT TO GEOMETRY
+  let ground = new Physijs.PlaneMesh(groundGeometry, groundMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
   ground.rotation.x = -0.5 * Math.PI;
   ground.name = 'ground'
   ground.receiveShadow = true;
