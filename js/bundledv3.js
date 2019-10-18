@@ -7824,7 +7824,7 @@ window.onload = () => {
 
 
   //!MAIN.JS
-  let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, _vector, clock, lastTimeStamp;
+  let camera, sceneHUD, cameraHUD, rotateAngle, renderer, scene, player, bullets, bulletsBlock, input, environment, clock, lastTimeStamp;
   let player2 = { id: null, x: 0, y: 0, z: 0, ph: 0 };
   let serverPackage = [];
   let player2Data = { id: null, x: 0, y: 0, z: 0, ph: 0 };
@@ -8517,3 +8517,4 @@ window.onload = () => {
   //...10 is mouse event listener, 12 is adding listener to window)...
   // CALL RENDER LOOP
   animate();
+}
