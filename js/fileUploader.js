@@ -49,28 +49,50 @@ MechLoader.load(
     player.add(radar);
 
     //P1 RADAR
-    let p1radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
+    // let p1radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
+    let p1radarGeometry = new THREE.ConeBufferGeometry(.1, .5, 4);
     let p1radarMaterial = new THREE.MeshLambertMaterial({
       color: 0x00ff6a,
       opacity: 0.5,
       transparent: true,
     })
+    p1radarGeometry.rotateX(-Math.PI / 2)
 
     p1radar = new THREE.Mesh(p1radarGeometry, p1radarMaterial); //MESH POINTS MAT TO GEOMETRY
     p1radar.position.set(7, 8, 0);
     player.add(p1radar);
     
     //P2 RADAR
-    let p2radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
+    // let p2radarGeometry = new THREE.SphereGeometry(.2, 1, 1);
+    let p2radarGeometry = new THREE.ConeBufferGeometry(.1, .5, 4);
     let p2radarMaterial = new THREE.MeshLambertMaterial({
       color: 0xff2a00,
       opacity: 0.5,
       transparent: true,
     })
+    p2radarGeometry.rotateX(-Math.PI / 2)
+
 
     p2radar = new THREE.Mesh(p2radarGeometry, p2radarMaterial); //MESH POINTS MAT TO GEOMETRY
     p2radar.position.set(7, 8, 0);
     player.add(p2radar);
+
+    //P1 Health Bar
+    let hpBarGeometry = new THREE.BoxGeometry(5, .5, .5);
+    let hpBarMaterial = new THREE.MeshLambertMaterial({
+      color: 0x00ff6a,
+      opacity: 0.75,
+      transparent: true,
+    })
+
+    hpBar = new THREE.Mesh(hpBarGeometry, hpBarMaterial); //MESH POINTS MAT TO GEOMETRY
+    hpBar.position.set(0, 9, 0);
+    // let ResizeWidthRatio = - 8 / 626;
+    // hpBar.position.x = ResizeWidthRatio * window.innerWidth
+    console.log(`X position: ${hpBar.position.x}`)
+    hpBar.rotation.y = Math.PI/2 * .5
+    hpBar.rotation.x = Math.PI/2 * .25
+    player.add(hpBar);
     
 }
 );

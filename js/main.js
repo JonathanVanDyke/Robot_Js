@@ -5,6 +5,10 @@ let player2Data = {id: null, x: 0, y: 0, z: 0, ph: 0};
 let bulletCount = 0;
 let j = 0;
 let p1radar;
+p1radar = {position: {x: 0, y: 0, z: 0}};
+let p2radar;
+p2radar = {position: {x: 0, y: 0, z: 0}};
+let hpBar;
 
 let RELOAD = 1000; 
 
@@ -224,21 +228,23 @@ function createRenderer() {
   hud.appendChild(playerHP);
   playerHP.innerHTML = `HP: ${player.hp}`;
 
-  //P1 HP BAR
-  p1hpBar = document.createElement('div');
-  p1hpBar.id = 'p1hpbar';
-  p1hpBar.style.cssText = `
-    margin: 55px 20px 45px;
-    opacity: 0.75;
-    height: 9px;
-    border: 2px solid black;
-    width: ${player.hp * 10}px;
-    position: absolute;
-    background-color: green;
-    transform: skewY(-9deg);
-  `;
+  // //P1 HP BAR
+  // p1hpBar = document.createElement('div');
+  // p1hpBar.id = 'p1hpbar';
+  // p1hpBar.style.cssText = `
+  //   margin: 55px 20px 45px;
+  //   opacity: 0.75;
+  //   height: 9px;
+  //   border: 2px solid black;
+  //   width: ${player.hp * 10}px;
+  //   position: absolute;
+  //   background-color: green;
+  //   transform: skewY(-9deg);
+  // `;
 
-  hud.appendChild(p1hpBar);
+  // hud.appendChild(p1hpBar);
+
+
   //p2 HP BAR
   p2hpBar = document.createElement('div');
   p2hpBar.id = 'p2hpbar';
@@ -283,10 +289,10 @@ function createRenderer() {
 
 
 let animate = function (timeStamp) {
-  let p1bar = document.getElementById('p1hpbar')
-  p1bar.style.width = `${player.hp * 10}px`
-  let p2bar = document.getElementById('p2hpbar')
-  p2bar.style.width = `${player2.hp * 10}px`
+  // let p1bar = document.getElementById('p1hpbar')
+  // p1bar.style.width = `${player.hp * 10}px`
+  // let p2bar = document.getElementById('p2hpbar')
+  // p2bar.style.width = `${player2.hp * 10}px`
   stats.begin();
 
   
@@ -589,6 +595,7 @@ let animate = function (timeStamp) {
     p1radar.position.x = radarX;
     p1radar.position.y = radarY;
     p1radar.position.z = radarZ;
+    p1radar.rotation.setFromQuaternion(player.getWorldQuaternion(tquaternion));
   }
 
   let radarX2 = player2.position.x / 300 + 7;
@@ -600,7 +607,13 @@ let animate = function (timeStamp) {
     p2radar.position.x = radarX2;
     p2radar.position.y = radarY2;
     p2radar.position.z = radarZ2;
+    p2radar.rotation.setFromQuaternion(player2.getWorldQuaternion(tquaternion));
   }
+
+  //HPBAR
+  hpBar.scale.x = (.25 * player.hp) / 5
+  let ResizeWidthRatio = - 8 / 626;
+  hpBar.position.x = ResizeWidthRatio * window.innerWidth + 4;
 
 
   scene.simulate();
