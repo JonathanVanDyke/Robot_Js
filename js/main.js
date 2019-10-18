@@ -31,10 +31,10 @@ function init() {
   // let scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 20 }); //Slow down scene to fix rotation bug
   scene.setGravity(new THREE.Vector3(0, -5, 0));
   {
-    const color = 'grey';  // white
+    const color = 'black';  // white
     const near = 90;
     const far = 300;
-    // scene.fog = new THREE.Fog(color, near, far);
+    scene.fog = new THREE.Fog(color, near, far);
   }
   scene.background = new THREE.Color('skyblue');
 
@@ -141,6 +141,7 @@ function createMeshes() {
   let playerMaterial = new THREE.MeshLambertMaterial({
     color: 0x22CAC2,
     opacity: 0.0,
+    visible: false,
   }); //COLOR OF MESH
   //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
 
@@ -302,7 +303,7 @@ let animate = function (timeStamp) {
   if(input.isXPressed) {
     player.__dirtyPosition = true;
     player.__dirtyRotation = true;
-    if (player.position.y > 10) {
+    if (player.position.y > 4.5) {
       player.translateOnAxis(new THREE.Vector3(0, movementSpeed * 200, 0), -rotateAngle)
       player.setAngularFactor(_vector);
       player.setAngularVelocity(_vector);
@@ -362,11 +363,11 @@ let animate = function (timeStamp) {
   //Player BULLETS
   if (input.isFirePressed) {
     
-    // if (j % 10 === 0) {
+    if (j % 2 === 0) {
       // console.log(j)
       bullets.fire()
-    // }
-    // j += 1;
+    }
+    j += 1;
     let xCompensator = ((player.rotation.y / Math.PI) * -2) * 100
     let zCompensator = 100 / (xCompensator + 1)
 

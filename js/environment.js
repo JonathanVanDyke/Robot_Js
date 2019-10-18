@@ -1,4 +1,44 @@
 function Environment() {
+  //CubeMap
+  // var loader = new THREE.CubeTextureLoader();
+  // loader.setPath('textures/cube/pisa/');
+
+  // var textureCube = loader.load([
+  //   'px.png', 'nx.png',
+  //   'py.png', 'ny.png',
+  //   'pz.png', 'nz.png'
+  // ]);
+
+  // var material = new THREE.MeshBasicMaterial({ color: 0xffffff, envMap: textureCube });
+  // let sceneCube = new THREE.Mesh(new THREE.BoxGeometry(100, 100, 100), material);
+  // scene.add(sceneCube);
+
+
+
+  // const loader = new THREE.CubeTextureLoader();
+  // const texture2 = loader.load([
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-x.jpg',
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-x.jpg',
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-y.jpg',
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-y.jpg',
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-z.jpg',
+  //   'https://threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-z.jpg',
+  // ]);
+  // scene.background = texture2;
+
+  const loader = new THREE.CubeTextureLoader();
+  const texture2 = loader.load([
+    './textures/c2/px.png',
+    './textures/c2/nx.png',
+    './textures/c2/py.png',
+    './textures/c2/ny.png',
+    './textures/c2/pz.png',
+    './textures/c2/nz.png',
+]);
+  scene.background = texture2;
+
+
+
   //Texture loader
 
   const textureLoader = new THREE.TextureLoader();
@@ -111,7 +151,8 @@ function Environment() {
     }
     
     let TargetBlockGeometry = new THREE.CylinderBufferGeometry(scale, scale, 1, 100); //PRIMITIVE SHAPE AND SIZE
-    let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
+    // let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
+    let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, envMap: scene.background }); //COLOR OF MESH
 
     let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, TargetBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
     TargetBlock.position.x = (Math.random() - 0.5) * 300;
