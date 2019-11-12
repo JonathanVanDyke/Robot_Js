@@ -170,13 +170,13 @@ function Environment() {
       color = 0xfffff;
       pointText = largePoint;
       rot = Math.PI / 2
-      point = 50;
+      point = 500;
       scale = 1;
     } else {
       color = 0xb52626;
       pointText = smallPoint;
       rot = 0;
-      point = 20;
+      point = 100;
       scale = .5;
     }
 
