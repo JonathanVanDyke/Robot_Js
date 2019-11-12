@@ -16,6 +16,7 @@ MechLoader.load(
       }
     }
     player.points2 = 0;
+    player.points = 0;
     player.position.set(0, 10, 0);
     // player.material.wireframe = true;
 

@@ -1,41 +1,41 @@
-const { Board, Servo } = require("johnny-five");
-const keypress = require("keypress");
+// const { Board, Servo } = require("johnny-five");
+// const keypress = require("keypress");
 
-keypress(process.stdin);
+// keypress(process.stdin);
 
-const board = new Board({
-  port: '/dev/tty.usbmodem14101'
-});
+// const board = new Board({
+//   port: '/dev/tty.usbmodem14101'
+// });
 
-board.on("ready", () => {
-  console.log(board.port)
+// board.on("ready", () => {
+//   console.log(board.port)
 
-  console.log("Use Up and Down arrows for CW and CCW respectively. Space to stop.");
+//   console.log("Use Up and Down arrows for CW and CCW respectively. Space to stop.");
 
-  const servo = new Servo.Continuous(10);
+//   const servo = new Servo.Continuous(10);
 
-  process.stdin.resume();
-  process.stdin.setEncoding("utf8");
-  process.stdin.setRawMode(true);
+//   process.stdin.resume();
+//   process.stdin.setEncoding("utf8");
+//   process.stdin.setRawMode(true);
 
-  process.stdin.on("keypress", (ch, key) => {
+//   process.stdin.on("keypress", (ch, key) => {
 
-    if (!key) {
-      return;
-    }
+//     if (!key) {
+//       return;
+//     }
 
-    if (key.name === "q") {
-      console.log("Quitting");
-      process.exit();
-    } else if (key.name === "up") {
-      console.log("CW");
-      servo.cw();
-    } else if (key.name === "down") {
-      console.log("CCW");
-      servo.ccw();
-    } else if (key.name === "space") {
-      console.log("Stopping");
-      servo.stop();
-    }
-  });
-});
+//     if (key.name === "q") {
+//       console.log("Quitting");
+//       process.exit();
+//     } else if (key.name === "up") {
+//       console.log("CW");
+//       servo.cw();
+//     } else if (key.name === "down") {
+//       console.log("CCW");
+//       servo.ccw();
+//     } else if (key.name === "space") {
+//       console.log("Stopping");
+//       servo.stop();
+//     }
+//   });
+// });

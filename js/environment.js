@@ -159,26 +159,39 @@ function Environment() {
   }
 
   _vector = new THREE.Vector3(0, 0, 0)
+  //initial target setup
   for (let i = 0; i < 100; i++) {
+    const largePoint = textureLoader.load('textures/50red.png');
+    const smallPoint = textureLoader.load('textures/20green.png');
     
     let color;
+    let pointText;
     if (i % 2 === 0) {
       color = 0xfffff;
+      pointText = largePoint;
       rot = Math.PI / 2
-      point = 100;
+      point = 50;
       scale = 1;
     } else {
       color = 0xb52626;
+      pointText = smallPoint;
       rot = 0;
-      point = 1000
+      point = 20;
       scale = .5;
     }
+
+
+    const targetMaterial = new THREE.MeshStandardMaterial({
+      map: pointText,
+    });
+    // debugger
     
-    let TargetBlockGeometry = new THREE.CylinderBufferGeometry(scale, scale, 1, 100); //PRIMITIVE SHAPE AND SIZE
-    // let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
-    let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, envMap: scene.background }); //COLOR OF MESH
+    let TargetBlockGeometry = new THREE.CylinderBufferGeometry(scale, scale, 3, 100); //PRIMITIVE SHAPE AND SIZE
+    let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
+    // let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, envMap: scene.background }); //COLOR OF MESH
 
     let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, TargetBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+    // let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, targetMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
     TargetBlock.position.x = (Math.random() - 0.5) * 300;
     TargetBlock.position.y = (Math.random() - 0.5) * 300 + 200;
     TargetBlock.position.z = (Math.random() - 0.5) * 300;
@@ -196,10 +209,16 @@ function Environment() {
     TargetBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
       if (other_object.name === 'bullet') {
         // player.points += this.points;
+        if (timeCounter > 0){
+          player.points2 += this.points;
+        }
         let pointEle = document.getElementById('points')
         // pointEle.innerHTML = `Score: ${player.points}`
+        pointEle.innerHTML = `Score: ${player.points2}`
         // TargetBlock.visible = false;
         scene.remove(this);
+        destroyedTargets += 1;
+        console.log(destroyedTargets)
       }
     });
   }

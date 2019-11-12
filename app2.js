@@ -8,7 +8,7 @@ const board = new Board({
   port: '/dev/tty.usbmodem14101'
 });
 
-
+console.log(board);
 board.on("ready", () => {
   var express = require('express'); //OK
   var app = express()

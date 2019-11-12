@@ -40,8 +40,8 @@
     "node": "10.16.3"
   },
   "scripts": {
-    "start": "node app2.js",
-    "web": "node app2.js",
+    "start": "node app.js",
+    "web": "node app.js",
     "webpack:watch": "webpack --watch --config webpack.dev.js",
     "webpack:build": "webpack --config webpack.prod.js  --optimize-minimize",
     "build": "webpack"

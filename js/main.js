@@ -11,11 +11,14 @@ let p2radar;
 p2radar = {position: {x: 0, y: 0, z: 0}};
 let hpBar, hpTxt = { position: { x: 0, y: 0, z: 0 } };;
 let hpBar2, hp2Txt = { position: { x: 0, y: 0, z: 0 } };;
-
+let timeCounter = 600;
+let destroyedTargets = 0;
 let RELOAD = 1000; 
 
 var stats = new Stats();
-stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+stats.showPanel(0);
+
+// //COMMENT IN FOR FPS / MS/ MB/ ETC STATISTICS
 // document.body.appendChild(stats.dom);
 
 function reset() {
@@ -24,15 +27,24 @@ function reset() {
     player.hp = 20;
     player2.hp = 20;
     let pointEle = document.getElementById('points')
-    player.points2 += 1;
+    player.points2 += 500;
     pointEle.innerHTML = `Score: ${player.points2}`
-    // player.position.set(0, 20, 0);
-    // player2.position.set(0, 20, 0);
-    // location.reload()
-    // animate().reset();
   }, 0);
-  // animate();
-  // requestAnimationFrame(animate);
+}
+function reset2() {
+
+  setTimeout(() => {
+    // let winner111 = document.getElementById('winner');
+    // winner111.innerHTML = 'YOU WIN!'
+    // window.RELOAD;
+  }, 0);
+
+  setTimeout(() => {
+    timeCounter = 600;
+    player.points2 = 0;
+    let pointEle = document.getElementById('points')
+    pointEle.innerHTML = `Score: ${player.points2}`
+  }, 2000)
 }
 
 function init() {
@@ -42,24 +54,18 @@ function init() {
   crosshair.style.cssText = `
   position: absolute;
   left: 49.75%;
-  font-size: 10px;
+  font-size: 25px;
   font-family: fantasy;
   top: 40%;
   `;
   document.body.appendChild(crosshair);
   crosshair.innerHTML = 'X'
   
-
-  // 201 
   Physijs.scripts.worker = './lib/physijs_worker.js';
   Physijs.scripts.ammo = './lib/ammo.js';
 
-  // 02
-  //RENDERER INPUT, SCENE (virtual environment)/CAMERA 
-  // let scene = new THREE.Scene();
   scene = new Physijs.Scene;
 
-  // let scene = new Physijs.Scene({ reportsize: 50, fixedTimeStep: 1 / 20 }); //Slow down scene to fix rotation bug
   scene.setGravity(new THREE.Vector3(0, -15, 0));
   {
     const color = 'black';  // white
@@ -74,25 +80,11 @@ function init() {
   createMeshes();
   createRenderer();
 
-
-  //202
-  //Bullets
+  //CREATE NEW INSTANCES
   bullets = new Bullets();
-  // let bulletsBlockGeometry = new THREE.SphereGeometry(1, 1, 1); //PRIMITIVE SHAPE AND SIZE
-  // let bulletsBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xff00C2 }); //COLOR OF MESH
-  // bulletsBlock = new Physijs.BoxMesh(bulletsBlockGeometry, bulletsBlockMaterial); //MESH POINTS MAT TO GEOMETRY
-
-  // 101
-  //INPUT OBJECT
   input = new Input();
-
-  // 001
-  // Environment
   environment = new Environment();
 
-
-
-  // 05
   //MAKE WINDOW RESPONSIVE ON RESIZE
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -101,23 +93,12 @@ function init() {
     camera.updateProjectionMatrix();
   })
 
-  // 06
-  //RAYCASTER => VECTOR 'RAY'... RAY === Array? (like vector array?)
-  let raycaster = new THREE.Raycaster();
-  let mouse = new THREE.Vector2();
-
-
-  // 09
-  //RENDER LOOP
-  // 102
-  //Normalize animation loop
   lastTimeStamp = 0;
 
   clock = new THREE.Clock();
   _vector = new THREE.Vector3(0, 0, 0)
 
-
-  // debugger
+  //WEBSOCKET INITIALIZE
   socket.emit('init', {
     id: socket.id,
     x: player.position.x,
@@ -137,14 +118,12 @@ function createCamera() {
     0.1, 
     300
   );
-  // debugger
 
   camera.position.set(0, 6, 10);
   camera.rotation.x = -.2
 }
 
 function createLights() {
-  // 08
   //LIGHT ONE
   let light1 = new THREE.DirectionalLight(0xFFFFFF, 2);
   light1.position.set(0, 20, 25)
@@ -154,41 +133,23 @@ function createLights() {
   let light2 = new THREE.AmbientLight(0xaaaaaa, 1);
   light2.position.set(0, 0, 25)
   scene.add(light2)
-
-  
-  // const ambientLight = new THREE.HemisphereLight(
-  //   0xddeeff,
-  //   0x202020,
-  //   .5,
-  // );
-  // scene.add(ambientLight)
-
 }
 
 function createMeshes() {
-  // 07
-  //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
   let playerGeometry = new THREE.BoxBufferGeometry(5, 8, 5, 0); //PRIMITIVE SHAPE AND SIZE (set 3rd val to 111 for cat paw)
   let playerMaterial = new THREE.MeshLambertMaterial({
     color: 0x22CAC2,
     opacity: 0.0,
     visible: false,
-  }); //COLOR OF MESH
-  //ELEMENT ONE (**LOOK UP MATERIAL OPTIONS**)
+  }); 
 
-  // let player = new THREE.Mesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player = new Physijs.BoxMesh(playerGeometry, playerMaterial); //MESH POINTS MAT TO GEOMETRY
   player.position.set(0, 1, 0);
   player.name = 'player';
   player.hp = 20;
   player.add(camera)
   player.points2 = 0;
-  
-  let player2Geometry = new THREE.CubeGeometry(5, 8, 5, 0);
-  let player2Material = new THREE.MeshLambertMaterial({
-    color: 0x22CAC2,
-    opacity: 0.0,
-  })
+  player.round = 0;
 
   player2 = new Physijs.BoxMesh(playerGeometry, playerMaterial);
 
@@ -202,18 +163,13 @@ function createRenderer() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  // renderer.gammaFactorw
-
   renderer.physicallyCorrectLights = true;
-  // renderer.setClearColor("#e5e5e5"); //BACKGROUND COLOR
   
   //HUD
   hud = document.getElementById('hud');
   hud.style.cssText = `
     display: flex;
   `;
-
-  
 
   //SCORE
   pointTally = document.createElement('h1');
@@ -222,7 +178,7 @@ function createRenderer() {
     position: absolute;
     bottom: 0;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 60px;
     // margin-left: 20px;
     margin: 0 auto;
   `; 
@@ -238,96 +194,58 @@ function createRenderer() {
     font-family: monospace;
     right: 0px;
     text-transform: uppercase;
-    font-size: 18px;
+    font-size: 30px;
     /* margin: 0px auto; */
     margin: 10px;
   `; 
   document.body.appendChild(pointTally);
   pointTally.innerHTML = 'W/A/S/D: Move <br /> Q/E: Rotate <br /> J: Fire <br /> SPACE: Fly <br /> K: Descend'
 
-  //P2 HP
-  opponentHP = document.createElement('h1');
-  opponentHP.id = 'opponent'
-  opponentHP.style.position = 'absolute';
-  opponentHP.style.marginTop = '70';
-  opponentHP.style.cssText = `
-    margin: 75px 20px 20px;
+
+
+  //Time...?
+  timeTally = document.createElement('h1');
+  timeTally.id = 'time'
+  timeTally.style.position = 'absolute';
+  timeTally.style.marginTop = '100';
+  timeTally.style.cssText = `
+    left: 34%;
+    top: 10%;
+    // border: 3px solid red;
+    padding: 20px;
+    border-radius: 10px;
+    color: red;
+    margin: 0 auto;
     position: absolute;
-    transform: skewY(-9deg);
+    font-size: 50px;
+    opacity: 0.5;
   `
-  // document.body.appendChild(opponentHP);
-  // hud.appendChild(opponentHP);
-  opponentHP.innerHTML = `Opponent HP: ${player2.hp}`;
-
-  //P1 HP
-  playerHP = document.createElement('h1');
-  playerHP.id = 'player'
-  playerHP.style.position = 'absolute';
-  playerHP.style.marginTop = '45';
-  playerHP.style.cssText = `
-    margin: 20px;
-    position: absolute;
-    transform: skewY(-9deg);
-  `
-  // hud.appendChild(playerHP);
-  if (player.hp) {
-    playerHP.innerHTML = `HP: ${player.hp}`;
-  } else {
-    playerHP.innerHTML = `HP: 20`;
-  }
-
-  // //P1 HP BAR
-  // p1hpBar = document.createElement('div');
-  // p1hpBar.id = 'p1hpbar';
-  // p1hpBar.style.cssText = `
-  //   margin: 55px 20px 45px;
-  //   opacity: 0.75;
-  //   height: 9px;
-  //   border: 2px solid black;
-  //   width: ${player.hp * 10}px;
-  //   position: absolute;
-  //   background-color: green;
-  //   transform: skewY(-9deg);
-  // `;
-
-  // hud.appendChild(p1hpBar);
-
-
-  //p2 HP BAR
-  // p2hpBar = document.createElement('div');
-  // p2hpBar.id = 'p2hpbar';
-  // p2hpBar.style.cssText = `
-  //   margin: 121px 20px 45px;
-  //   opacity: 0.75;
-  //   height: 9px;
-  //   border: 2px solid black;
-  //   width: ${player2.hp * 10}px;
-  //   position: absolute;
-  //   background-color: red;
-  //   transform: skewY(-9deg);
-  // `;
-  // hud.appendChild(p2hpBar);
-
-  // //Time...?
-  // timeTally = document.createElement('h1');
-  // timeTally.id = 'time'
-  // timeTally.style.position = 'absolute';
-  // timeTally.style.marginTop = '100';
-  // document.body.appendChild(timeTally);
-  // timeTally.innerHTML = 'Time: 0'
+  document.body.appendChild(timeTally);
+  timeTally.innerHTML = 'Time: 0'
 
   //Winner text...
   winnerUI = document.createElement('h1');
   winnerUI.id = 'winner'
   winnerUI.style.position = 'absolute';
   winnerUI.style.marginTop = '130';
-  // document.body.appendChild(winnerUI);
+  document.body.appendChild(winnerUI);
   winnerUI.style.cssText = `
-    transform: skewY(-9deg);
-    margin: 161px 20px;
+    left: 34%;
+    top: 2%;
+    // border: 3px solid red;
+    padding: 20px;
+    border-radius: 10px;
+    color: red;
+    margin: 0 auto;
     position: absolute;
+    font-size: 50px;
+    opacity: 0.5;
   `
-  winnerUI.innerHTML = 'FIGHT!'
+  if (timeCounter <= 600) {
+    winnerUI.innerHTML = '      FIGHT!      '
+  } else {
+    winnerUI.innerHTML = `Score This Round: ${player.points2}`
+  }
 
 
   document.body.appendChild(renderer.domElement);
@@ -337,6 +255,20 @@ function createRenderer() {
 
 
 let animate = function (timeStamp) {
+  timeCounter -= 1;
+
+  let winnerUI = document.getElementById('winner');
+  winnerUI.innerHTML = 'YOU WIN!'
+
+  let score;
+  if (timeCounter >= 0) {
+    score = null;
+    winnerUI.innerHTML = '-----------Fight!-----------'
+  } else {
+    score = score || player.points2;
+    winnerUI.innerHTML = `Score This Round: ${score}`
+  }
+
   // let p1bar = document.getElementById('p1hpbar')
   // p1bar.style.width = `${player.hp * 10}px`
   // let p2bar = document.getElementById('p2hpbar')
@@ -355,6 +287,12 @@ let animate = function (timeStamp) {
 
   let time = document.getElementById('time')
   // time.innerHTML = `Time: ${Math.floor(clock.elapsedTime * 100)}`
+  if (timeCounter > 0) {
+    time.innerHTML = `Time: ${timeCounter * 10}`
+  } else {
+    time.innerHTML = `Time: ${0}`
+  }
+  
   // let socketData = 'nope';
   // time.innerHTML = `Time: ${socketData}`
 
@@ -542,16 +480,78 @@ let animate = function (timeStamp) {
     }
     player2.setAngularFactor(_vector);
     player2.setAngularVelocity(_vector);
+      resetObjects();
   }
 
+  function resetObjects() {
+    for (let i = 0; i < destroyedTargets; i++) {
+      debugger
+      console.log("LOADNEW")
+      destroyedTargets -= 1;
+      const textureLoader = new THREE.TextureLoader();
 
-  // //GRAVITY...fix this please
-  // if (player.position.y <= 1) {
-  //   player.translateOnAxis(new THREE.Vector3(0, 0, 0), -rotateAngle)
-  // } else {
-  //   player.translateOnAxis(new THREE.Vector3(0, playerSpeed * 50, 0), -rotateAngle)
-  // }
-  // camera.lookAt(player.position)
+      const largePoint = textureLoader.load('textures/50red.png');
+      const smallPoint = textureLoader.load('textures/20green.png');
+
+      let color;
+      let pointText;
+      if (i % 2 === 0) {
+        color = 0xfffff;
+        pointText = largePoint;
+        rot = Math.PI / 2
+        point = 50;
+        scale = 1;
+      } else {
+        color = 0xb52626;
+        pointText = smallPoint;
+        rot = 0;
+        point = 20;
+        scale = .5;
+      }
+
+      const targetMaterial = new THREE.MeshStandardMaterial({
+        map: pointText,
+      });
+      debugger
+
+      let TargetBlockGeometry = new THREE.CylinderBufferGeometry(scale, scale, 3, 100); //PRIMITIVE SHAPE AND SIZE
+      let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: color }); //COLOR OF MESH
+      // let TargetBlockMaterial = new THREE.MeshLambertMaterial({ color: 0xffffff, envMap: scene.background }); //COLOR OF MESH
+
+      let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, TargetBlockMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+      // let TargetBlock = new Physijs.BoxMesh(TargetBlockGeometry, targetMaterial, 0, 0); //MESH POINTS MAT TO GEOMETRY
+      TargetBlock.position.x = (Math.random() - 0.5) * 300;
+      TargetBlock.position.y = (Math.random() - 0.5) * 300 + 200;
+      TargetBlock.position.z = (Math.random() - 0.5) * 300;
+      TargetBlock.rotation.x = Math.PI / 2;
+      TargetBlock.rotation.z = rot;
+      // debugger//
+      TargetBlock.scale.set(10, 1, 10)
+      TargetBlock.name = 'target'
+      TargetBlock.points = point;
+      scene.add(TargetBlock); //DROP ELEMENST INTO VIRTUAL ENVIRONMENT
+      console.log('SUCCESS')
+
+      TargetBlock.setAngularFactor(_vector);
+      TargetBlock.setAngularVelocity(_vector);
+
+      TargetBlock.addEventListener('collision', function (other_object, linear_velocity, angular_velocity) {
+        if (other_object.name === 'bullet') {
+          // player.points += this.points;
+          if (timeCounter > 0) {
+            player.points2 += this.points;
+          }
+          let pointEle = document.getElementById('points')
+          // pointEle.innerHTML = `Score: ${player.points}`
+          pointEle.innerHTML = `Score: ${player.points2}`
+          // TargetBlock.visible = false;
+          scene.remove(this);
+        }
+      });
+    }
+
+  }
+
 
 
   function delete3DOBJ(objName) {
@@ -563,31 +563,20 @@ let animate = function (timeStamp) {
     // animate();
   }
 
-  // socket.emit('spawn', {
-  //   id: socket.id,
-  //   x: player.position.x,
-  //   y: player.position.y,
-  //   z: player.position.z,
-  //   h: player.rotation.y,
-  //   pb: player.rotation.x
-  // });
 
   let wpVector2 = new THREE.Vector3();
   player.getWorldDirection(wpVector2).y
 
-  if (player.hp <= 0 || player2.hp <= 0) {
-    reset();
-    // player.hp = 200;
-    // player2.hp = 200;
-    // debugger
+  if (timeCounter <= 0) {
+    reset2();
+    resetObjects()
   }
 
-  // if (player2.hp <= 0) {
-  //   // player.hp = 200;
-  //   // player2.hp = 200;
-  //   // debugger
-  //   reset();
-  // }
+  if (player2.hp <= 0 || player.hp <= 0) {
+    reset();
+  } 
+
+ 
 
   //PLAYER 2 UPDATE
   var tquaternion = new THREE.Quaternion()
@@ -602,7 +591,6 @@ let animate = function (timeStamp) {
   player2.rotation.setFromQuaternion(player2Data.h);
   player2.firing = player2Data.firing;
   player.hp = player2Data.hp || 20;
-  // debugger
   scene.add(player2)
   
   let adjustRot = THREE.Math.degToRad(20)
@@ -622,7 +610,6 @@ let animate = function (timeStamp) {
   socket.on('otherSpawn', (serverPack) => {
     serverPackage = serverPack
   })
-  // debugger
   for (let i = 0; i < serverPackage.length; i++) {
     if (serverPackage[i].id !== socket.id) {
       player2Data = serverPackage[i];
@@ -662,19 +649,7 @@ let animate = function (timeStamp) {
 
   //HPBAR
   hpBar.scale.x = (.25 * player.hp) / 5
-  // hpBar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
-  // hpBar.position.x = 4;
-
-  // //HPTEXT
-  // hpTxt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
-  // hpTxt.position.x = 4;
-  
-  //HP2BAR
   hp2Bar.scale.x = (.25 * player2.hp) / 5
-  // hp2Bar.position.x = - ResizeWidthRatio * window.innerWidth + 4;
-
-  // //HP2TEXT
-  // hp2Txt.position.x = - ResizeWidthRatio * window.innerWidth + 4;
 
 
   scene.simulate();
@@ -687,7 +662,5 @@ let animate = function (timeStamp) {
 
 init();
 
-// 11 
-//...10 is mouse event listener, 12 is adding listener to window)...
 // CALL RENDER LOOP
 animate();
