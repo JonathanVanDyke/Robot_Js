@@ -239,7 +239,7 @@ function createRenderer() {
     margin: 0 auto;
     position: absolute;
     font-size: 50px;
-    opacity: 0.5;
+    opacity: 0.9;
   `
   if (timeCounter <= 600) {
     winnerUI.innerHTML = '      FIGHT!      '
