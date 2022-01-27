@@ -27,7 +27,7 @@
     "socket.io": "2.3.0",
     "stats.js": "^0.17.0",
     "style-loader": "^1.0.0",
-    "three": "^0.109.0",
+    "three": "^0.137.0",
     "utf-8-validate": "5.0.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.9",
