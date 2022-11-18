@@ -30,7 +30,7 @@
     "three": "^0.109.0",
     "utf-8-validate": "5.0.2",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.9",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.8.2",
     "webpack-merge": "^4.2.2",
     "ws": "7.1.2"
